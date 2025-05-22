@@ -4,7 +4,7 @@ export interface TaskStatusCreate {
   name: string;
 };
 
-export interface TaskStatus extends TaskStatusCreate {
+export interface TaskStatusRecord extends TaskStatusCreate {
   id: number;
   createdAt: Date;
   updatedAt: Date | null;
@@ -15,7 +15,7 @@ export interface TaskCategoryCreate {
   name: string;
 };
 
-export interface TaskCategory extends TaskCategoryCreate {
+export interface TaskCategoryRecord extends TaskCategoryCreate {
   id: number;
   createdAt: Date;
   updatedAt: Date | null;
@@ -45,4 +45,4 @@ interface TaskBody extends TaskUpdateBody {
   deletedAt: Date | null;
 }
 
-export type Task = Pretty<TaskBody>;
+export type TaskRecord = Pretty<TaskBody>;
