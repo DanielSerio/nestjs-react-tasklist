@@ -2,14 +2,27 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TaskStatusesService } from './task-statuses.service';
 import { CreateTaskStatusDto } from './dto/create-task-status.dto';
 import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
+import { BasicController } from 'src/controllers/basic.controller';
+import { TaskStatusValidator } from 'src/validators/task-status.validator';
 
 @Controller('task-statuses')
-export class TaskStatusesController {
-  constructor(private readonly taskStatusesService: TaskStatusesService) {}
+export class TaskStatusesController extends BasicController<CreateTaskStatusDto, UpdateTaskStatusDto> {
+  constructor(private readonly taskStatusesService: TaskStatusesService) {
+    super({
+      createValidator: TaskStatusValidator.forCreate,
+      updateValidator: TaskStatusValidator.forUpdate
+    });
+  }
 
   @Post()
   create(@Body() createTaskStatusDto: CreateTaskStatusDto) {
-    return this.taskStatusesService.create(createTaskStatusDto);
+    try {
+      const valid = this.validateCreate(createTaskStatusDto);
+
+      return this.taskStatusesService.create(valid);
+    } catch (err) {
+      this.handleError(err);
+    }
   }
 
   @Get()

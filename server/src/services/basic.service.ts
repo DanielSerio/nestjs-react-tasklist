@@ -1,6 +1,6 @@
-import { DataSource, EntityTarget, Repository } from "typeorm";
+import { DataSource, EntityTarget, ObjectLiteral, Repository } from "typeorm";
 
-export class BasicService<Entity, Create, Update> {
+export abstract class BasicService<Entity extends ObjectLiteral, Create, Update> {
   protected get repo(): Repository<Entity> {
     return this.dataSource.getRepository(this.model);
   }
