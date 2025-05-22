@@ -1,4 +1,5 @@
 import { BadRequestException, InternalServerErrorException } from "@nestjs/common";
+import { FindManyOptions } from "typeorm";
 import { ZodError, ZodSchema } from "zod";
 
 export interface BasicControllerArgs<CreateDto, UpdateDto> {
@@ -6,7 +7,7 @@ export interface BasicControllerArgs<CreateDto, UpdateDto> {
   updateValidator: ZodSchema<UpdateDto>;
 }
 
-export abstract class BasicController<CreateDto, UpdateDto> {
+export abstract class BasicController<CreateDto, UpdateDto, RecordType> {
   protected createValidator: ZodSchema<CreateDto>;
   protected updateValidator: ZodSchema<UpdateDto>;
 
@@ -17,6 +18,16 @@ export abstract class BasicController<CreateDto, UpdateDto> {
 
   private isZodError<T>(err: unknown): err is ZodError<T> {
     return typeof err == 'object' && err !== null && (err as any).issues !== undefined;
+  }
+
+  protected isValidID(idString: string): boolean {
+    const int = +idString;
+
+    if (!isNaN(int) && int % 1 === 0 || int > 0) {
+      return true;
+    }
+
+    return false;
   }
 
   protected validateCreate(createDto: CreateDto) {
@@ -33,5 +44,11 @@ export abstract class BasicController<CreateDto, UpdateDto> {
     }
 
     throw new InternalServerErrorException(err);
+  }
+
+  protected extractListParamsFromURL(url: string): FindManyOptions<RecordType> {
+    //TODO: this
+
+    return {};
   }
 }

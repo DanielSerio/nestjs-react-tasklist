@@ -1,12 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, Req } from '@nestjs/common';
 import { TaskStatusesService } from './task-statuses.service';
 import { CreateTaskStatusDto } from './dto/create-task-status.dto';
 import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
 import { BasicController } from 'src/controllers/basic.controller';
 import { TaskStatusValidator } from 'src/validators/task-status.validator';
+import { TaskStatusRecord } from '#types/task.types';
+import { Request } from 'express';
 
 @Controller('task-statuses')
-export class TaskStatusesController extends BasicController<CreateTaskStatusDto, UpdateTaskStatusDto> {
+export class TaskStatusesController extends BasicController<CreateTaskStatusDto, UpdateTaskStatusDto, TaskStatusRecord> {
   constructor(private readonly taskStatusesService: TaskStatusesService) {
     super({
       createValidator: TaskStatusValidator.forCreate,
@@ -26,22 +28,38 @@ export class TaskStatusesController extends BasicController<CreateTaskStatusDto,
   }
 
   @Get()
-  findAll() {
-    return this.taskStatusesService.findAll();
+  findAll(@Req() req: Request) {
+    const params = this.extractListParamsFromURL(req.url);
+
+    return this.taskStatusesService.findAll(params);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
+    if (!this.isValidID(id)) {
+      throw new BadRequestException(`Invalid ID: ${id}`);
+    }
+
     return this.taskStatusesService.findOne(+id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTaskStatusDto: UpdateTaskStatusDto) {
-    return this.taskStatusesService.update(+id, updateTaskStatusDto);
+    try {
+      const valid = this.validateUpdate(updateTaskStatusDto);
+
+      return this.taskStatusesService.update(+id, valid);
+    } catch (err) {
+      this.handleError(err);
+    }
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
+    if (!this.isValidID(id)) {
+      throw new BadRequestException(`Invalid ID: ${id}`);
+    }
+
     return this.taskStatusesService.remove(+id);
   }
 }
