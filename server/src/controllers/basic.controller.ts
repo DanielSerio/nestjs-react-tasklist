@@ -20,6 +20,20 @@ export abstract class BasicController<CreateDto, UpdateDto, RecordType> {
     return typeof err == 'object' && err !== null && (err as any).issues !== undefined;
   }
 
+  private getQueryInt(val: string | null, min: number = 0, defaultValue: number = 0) {
+    if (val === null || isNaN(+val)) {
+      return defaultValue;
+    }
+
+    const int = +val;
+
+    if (int <= min) {
+      return min;
+    }
+
+    return ~~val;
+  }
+
   protected isValidID(idString: string): boolean {
     const int = +idString;
 
@@ -47,8 +61,19 @@ export abstract class BasicController<CreateDto, UpdateDto, RecordType> {
   }
 
   protected extractListParamsFromURL(url: string): FindManyOptions<RecordType> {
-    //TODO: this
+    const parsableUrl = new URL(url);
+    const searchParams = parsableUrl.searchParams;
 
-    return {};
+    const pLimit = searchParams.get('limit');
+    const pOffset = searchParams.get('offset');
+    const pSort = searchParams.get('sort');
+    const pFilter = searchParams.get('filter');
+
+    return {
+      take: this.getQueryInt(pLimit),
+      skip: this.getQueryInt(pOffset),
+      order: pSort ? JSON.parse(decodeURIComponent(pSort)) : null,
+      where: pFilter ? JSON.parse(decodeURIComponent(pFilter)) : null
+    };
   }
 }
