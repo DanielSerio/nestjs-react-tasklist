@@ -1,0 +1,8 @@
+.main-nav {
+  min-width: 144px;
+
+  .active {
+    background-color: var(--mantine-primary-color-7);
+    color: var(--mantine-primary-color-0);
+  }
+}

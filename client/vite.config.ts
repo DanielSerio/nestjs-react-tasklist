@@ -12,6 +12,9 @@ export default defineConfig({
     react()
   ],
   server: {
+    watch: {
+      usePolling: true,
+    },
     host: '0.0.0.0'
   },
   resolve: {
