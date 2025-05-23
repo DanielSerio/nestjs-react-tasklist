@@ -1,3 +1,9 @@
+import { Box } from "@mantine/core";
+
 export function EditTableBody() {
-  return <div>EditTableBody</div>;
+  return (
+    <Box className="edit-table-body">
+      <div>EditTableBody</div>
+    </Box>
+  );
 }

@@ -1,4 +1,4 @@
-import { Flex } from "@mantine/core";
+import { Box, Flex } from "@mantine/core";
 import { EditTableHeader } from "./EditTableHeader";
 import { EditTableBody } from "./EditTableBody";
 import {
@@ -9,10 +9,12 @@ import {
 export function EditTable({ endpoint }: { endpoint: EditTableEndpoint }) {
   return (
     <EditTableProvider endpoint={endpoint}>
-      <Flex>
-        <EditTableHeader />
-        <EditTableBody />
-      </Flex>
+      <Box className={`edit-table ${endpoint}`}>
+        <Flex className="edit-table-container" direction="column">
+          <EditTableHeader />
+          <EditTableBody />
+        </Flex>
+      </Box>
     </EditTableProvider>
   );
 }

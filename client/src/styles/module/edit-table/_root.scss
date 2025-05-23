@@ -1,0 +1,20 @@
+main:has(.edit-table),
+.edit-table-container {
+  position: relative;
+}
+
+.edit-table {
+  position: absolute;
+  height: calc(100% - 48px); // remove header height
+  width: 100%;
+}
+
+.edit-table-container {
+  height: 100%;
+}
+
+.edit-table-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
