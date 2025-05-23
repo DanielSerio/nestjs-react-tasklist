@@ -1,33 +1,31 @@
 import { type PropsWithChildren } from "react";
 import { MantineProvider } from "@mantine/core";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { RouterProvider, createRouter } from '@tanstack/react-router'
+import { RouterProvider, createRouter } from "@tanstack/react-router";
 
 import { THEME } from "#const/theme";
 import { QUERY_CLIENT } from "#const/query-client";
 
-
 // Import the generated route tree
-import { routeTree } from './routeTree.gen'
+import { routeTree } from "./routeTree.gen";
 
 // Create a new router instance
-const router = createRouter({ routeTree })
+const router = createRouter({ routeTree });
 
 // Register the router instance for type safety
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface Register {
-    router: typeof router
+    router: typeof router;
   }
 }
 
-
 function Providers({ children }: PropsWithChildren) {
   return (
-    <MantineProvider theme={THEME}>
-      <QueryClientProvider client={QUERY_CLIENT}>
+    <QueryClientProvider client={QUERY_CLIENT}>
+      <MantineProvider defaultColorScheme="dark" theme={THEME}>
         {children}
-      </QueryClientProvider>
-    </MantineProvider>
+      </MantineProvider>
+    </QueryClientProvider>
   );
 }
 

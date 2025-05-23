@@ -13,7 +13,7 @@ import { Task } from './tasks/entities/task.entity';
   imports: [
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      database: 'tasklist',
+      database: './tasklist',
       entities: [
         TaskStatus,
         TaskCategory,
