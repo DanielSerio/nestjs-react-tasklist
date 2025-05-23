@@ -1,12 +1,10 @@
 import { NAV_ITEMS } from "#const/navigation";
 import { ActionIcon, Menu } from "@mantine/core";
-import { useNavigate, useRouterState } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { TbMenu2 } from "react-icons/tb";
 
-export function MainNav() {
-  const routerState = useRouterState();
+export function MainNav({ resolvedPathname }: { resolvedPathname?: string }) {
   const navigate = useNavigate();
-  const resolvedPathname = routerState.resolvedLocation?.pathname;
 
   return (
     <Menu classNames={{ dropdown: "main-nav" }}>

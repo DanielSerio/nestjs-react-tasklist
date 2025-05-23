@@ -1,8 +1,13 @@
-import { ActionIcon, AppShellHeader, Flex, Menu } from "@mantine/core";
-import { TbMenu2 } from "react-icons/tb";
+import { AppShellHeader, Flex, Text } from "@mantine/core";
 import { MainNav } from "../navigation/MainNav";
+import { Link, useRouterState } from "@tanstack/react-router";
+import { getPageTitle } from "#utilities/page.helpers";
 
 export function Header() {
+  const routerState = useRouterState();
+  const resolvedPathname = routerState.resolvedLocation?.pathname;
+  const title = getPageTitle(resolvedPathname ?? "");
+
   return (
     <AppShellHeader>
       <Flex
@@ -12,8 +17,18 @@ export function Header() {
         pl={"xs"}
         className="toolbar"
       >
-        <div>Header Text</div>
-        <MainNav />
+        <Flex align="center" gap="xs">
+          <Text
+            variant="gradient"
+            fw="bolder"
+            gradient={{ from: "cyan", to: "teal" }}
+          >
+            <Link to="/">TaskList</Link>
+          </Text>
+          <Text fw="lighter">{title}</Text>
+        </Flex>
+
+        <MainNav resolvedPathname={resolvedPathname} />
       </Flex>
     </AppShellHeader>
   );

@@ -1,9 +1,15 @@
+import { AppShellMain } from "@mantine/core";
 import { createFileRoute } from "@tanstack/react-router";
+import { EditTable } from "#components/edit-table/EditTable";
 
 export const Route = createFileRoute("/categories")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  return <div>Hello "/categories"!</div>;
+  return (
+    <AppShellMain>
+      <EditTable endpoint="categories" />
+    </AppShellMain>
+  );
 }

@@ -22,7 +22,7 @@ export default defineConfig({
       '#const': '/src/const',
       '#components': '/src/components',
       '#hooks': '/src/hooks',
-      '#utils': '/src/utils',
+      '#utilities': '/src/utilities',
       '#styles': '/src/styles',
       '#assets': '/src/assets',
       '#routes': '/src/routes',
