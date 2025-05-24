@@ -2,6 +2,7 @@ import type { EditTableEntity } from "#const/edit-table";
 import type { ColumnFiltersState, SortingState, useReactTable } from "@tanstack/react-table";
 import type { ETGlobalSearchAction } from "./reducer/global-search";
 import type { ETSelectAction } from "./reducer/select";
+import type { ETPagingLimitAction, ETPagingOffsetAction } from "./reducer/paging";
 
 export type EditTableEndpoint = "statuses" | "categories";
 
@@ -50,5 +51,5 @@ export interface ETAction {
 }
 
 export type EditTableReducerAction = ETAction & (
-  ETGlobalSearchAction | ETSelectAction
+  ETGlobalSearchAction | ETSelectAction | ETPagingLimitAction | ETPagingOffsetAction
 );

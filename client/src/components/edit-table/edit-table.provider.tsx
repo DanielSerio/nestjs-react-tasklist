@@ -18,6 +18,7 @@ import type {
 import { initialMethods, initialState } from "./edit-table.const";
 import { globalSearchReducer } from "./reducer/global-search";
 import { selectReducer } from "./reducer/select";
+import { setLimitReducer, setOffsetReducer } from "./reducer/paging";
 
 const EditTableContext = createContext<EditTableContextType>([
   {
@@ -36,6 +37,10 @@ function reducer(state: EditTableContextState, action: EditTableReducerAction) {
       return globalSearchReducer(state, action);
     case "set-select":
       return selectReducer(state, action);
+    case "set-limit":
+      return setLimitReducer(state, action);
+    case "set-offset":
+      return setOffsetReducer(state, action);
     default:
       return state;
   }
@@ -74,6 +79,10 @@ export const EditTableProvider = ({
       dispatch({ name: "set-search", payload: search }),
     setSelect: (select: string[] | "*") =>
       dispatch({ name: "set-select", payload: select }),
+    setLimit: (limit: number) =>
+      dispatch({ name: "set-limit", payload: limit }),
+    setOffset: (offset: number) =>
+      dispatch({ name: "set-offset", payload: offset }),
   };
   return (
     <EditTableContext.Provider
