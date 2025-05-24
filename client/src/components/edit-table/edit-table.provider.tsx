@@ -13,7 +13,6 @@ import {
 import { useEntityList } from "#hooks/useEntityList";
 import type {
   EditTableContextMethods,
-  EditTableContextObject,
   EditTableContextState,
   EditTableContextType,
   EditTableEndpoint,
