@@ -19,6 +19,11 @@ import { initialMethods, initialState } from "./edit-table.const";
 import { globalSearchReducer } from "./reducer/global-search";
 import { selectReducer } from "./reducer/select";
 import { setLimitReducer, setOffsetReducer } from "./reducer/paging";
+import {
+  addSortReducer,
+  removeSortReducer,
+  setSortReducer,
+} from "./reducer/sorting";
 
 const EditTableContext = createContext<EditTableContextType>([
   {
@@ -41,6 +46,12 @@ function reducer(state: EditTableContextState, action: EditTableReducerAction) {
       return setLimitReducer(state, action);
     case "set-offset":
       return setOffsetReducer(state, action);
+    case "add-sort":
+      return addSortReducer(state, action);
+    case "remove-sort":
+      return removeSortReducer(state, action);
+    case "set-sort":
+      return setSortReducer(state, action);
     default:
       return state;
   }
@@ -83,6 +94,8 @@ export const EditTableProvider = ({
       dispatch({ name: "set-limit", payload: limit }),
     setOffset: (offset: number) =>
       dispatch({ name: "set-offset", payload: offset }),
+    addSorting: (column: string, desc: boolean) =>
+      dispatch({ name: "add-sort", payload: { id: column, desc } }),
   };
   return (
     <EditTableContext.Provider

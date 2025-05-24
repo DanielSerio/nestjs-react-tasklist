@@ -3,6 +3,7 @@ import type { ColumnFiltersState, SortingState, useReactTable } from "@tanstack/
 import type { ETGlobalSearchAction } from "./reducer/global-search";
 import type { ETSelectAction } from "./reducer/select";
 import type { ETPagingLimitAction, ETPagingOffsetAction } from "./reducer/paging";
+import type { ETAddSortAction, ETRemoveSortAction, ETSetSortAction } from "./reducer/sorting";
 
 export type EditTableEndpoint = "statuses" | "categories";
 
@@ -24,7 +25,7 @@ export interface EditTableContextMethods {
   // Search methods
   setGlobalSearch: (search: string) => void;
   // Sort methods
-  addSorting: (column: String, desc: boolean) => void;
+  addSorting: (column: string, desc: boolean) => void;
   removeSorting: (column: string) => void;
   setSorting: (sort: SortingState | null) => void;
   // Filter methods
@@ -43,7 +44,7 @@ export type EditTableContextType = [
 ];
 
 
-export type ETActionName = 'set-search' | 'set-select' | 'set-limit' | 'set-offset';
+export type ETActionName = 'set-search' | 'set-select' | 'set-limit' | 'set-offset' | 'add-sort' | 'remove-sort' | 'set-sort';
 
 export interface ETAction {
   name: ETActionName;
@@ -51,5 +52,5 @@ export interface ETAction {
 }
 
 export type EditTableReducerAction = ETAction & (
-  ETGlobalSearchAction | ETSelectAction | ETPagingLimitAction | ETPagingOffsetAction
+  ETGlobalSearchAction | ETSelectAction | ETPagingLimitAction | ETPagingOffsetAction | ETSetSortAction | ETAddSortAction | ETRemoveSortAction
 );
