@@ -30,8 +30,9 @@ const defaultColumns: ColumnDef<EditTableEntity>[] = [
   },
   {
     header: "Updated At",
-    accessorKey: "createdAt",
-    accessorFn: (row) => row.createdAt.toLocaleString(),
+    accessorKey: "updatedAt",
+    accessorFn: (row) =>
+      row.updatedAt ? row.updatedAt.toLocaleString() : null,
     size: 120,
   },
   {

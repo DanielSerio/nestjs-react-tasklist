@@ -61,7 +61,7 @@ export abstract class BasicController<CreateDto, UpdateDto, RecordType> {
   }
 
   protected extractListParamsFromURL(url: string): FindManyOptions<RecordType> {
-    const parsableUrl = new URL(url);
+    const parsableUrl = new URL(`http://localhost:3000${url}`);
     const searchParams = parsableUrl.searchParams;
 
     const pLimit = searchParams.get('limit');

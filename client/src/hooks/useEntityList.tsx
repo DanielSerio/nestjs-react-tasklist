@@ -1,3 +1,4 @@
+import { BASE_URL } from "#const/api";
 import type { EditTableEntity } from "#const/edit-table";
 import { QUERY_KEYS } from "#const/query-client";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
@@ -111,7 +112,7 @@ function getGlobalSearchChunk(search?: string | null) {
  */
 export function useEntityList(options: UseEntityListOptions) {
   function constructApiUrl(opts: Omit<UseEntityListOptions, "endpoint">) {
-    const baseUrl = `/${options.endpoint}`;
+    const baseUrl = `${BASE_URL}/task-${options.endpoint}`;
     const urlSegments = [
       getPagingChunk(opts.paging),
       getSortingChunk(opts.sort),
