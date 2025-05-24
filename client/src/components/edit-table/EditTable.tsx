@@ -1,10 +1,8 @@
 import { Box, Flex } from "@mantine/core";
 import { EditTableHeader } from "./EditTableHeader";
 import { EditTableBody } from "./EditTableBody";
-import {
-  EditTableProvider,
-  type EditTableEndpoint,
-} from "./edit-table.provider";
+import { EditTableProvider } from "./edit-table.provider";
+import type { EditTableEndpoint } from "./edit-table.provider.types";
 
 export function EditTable({ endpoint }: { endpoint: EditTableEndpoint }) {
   return (

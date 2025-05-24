@@ -1,3 +1,11 @@
+.edit-table-container > header {
+  padding-bottom: 0; // initial value for .column-headers offset
+  border-bottom: 1px solid var(--mantine-color-default-border);
+  background: var(--mantine-color-body);
+}
+
 .column-headers {
   display: grid;
+  height: 24px;
+  border-top: 1px solid var(--mantine-color-default-border);
 }

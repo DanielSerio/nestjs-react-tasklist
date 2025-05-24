@@ -9,6 +9,7 @@ main:has(.edit-table),
   position: absolute;
   height: calc(100% - 48px); // remove header height
   width: 100%;
+  font-size: 0.8em;
 }
 
 .edit-table-container {

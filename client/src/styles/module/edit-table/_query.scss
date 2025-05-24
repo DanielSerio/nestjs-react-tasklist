@@ -3,4 +3,8 @@
   .column-headers {
     display: none;
   }
+
+  .edit-table-container > header {
+    padding: 12px; // offset for .column-headers
+  }
 }
