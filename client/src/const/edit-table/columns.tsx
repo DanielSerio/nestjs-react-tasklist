@@ -9,7 +9,7 @@ const defaultColumns: ColumnDef<EditTableEntity>[] = [
   {
     header: "ID",
     accessorKey: "id",
-    size: 40,
+    size: 30,
     enableResizing: false,
     enableSorting: false,
     enableColumnFilter: false,
@@ -17,7 +17,7 @@ const defaultColumns: ColumnDef<EditTableEntity>[] = [
   {
     header: "Name",
     accessorKey: "name",
-    size: 200,
+    size: 250,
     enableResizing: false,
     enableSorting: true,
     enableColumnFilter: true,

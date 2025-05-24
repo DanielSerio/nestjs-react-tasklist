@@ -1,14 +1,19 @@
-import { Flex } from "@mantine/core";
+import { Box, Flex } from "@mantine/core";
 import type { useEditTableContext } from "./edit-table.provider";
 import { EditTableCell } from "./EditTableCell";
+import { LayoutHelpers } from "#utilities/layout.helpers";
 
 export interface EditTableColumnHeadersProps {
   table: ReturnType<typeof useEditTableContext>[0]["table"];
 }
 
 export function EditTableColumnHeaders({ table }: EditTableColumnHeadersProps) {
+  const { gridTemplateColumns } = LayoutHelpers.getGridColumnProfile(
+    table.getAllColumns().map((col) => col.columnDef)
+  );
+
   return (
-    <Flex>
+    <Box className="column-headers" style={{ gridTemplateColumns }}>
       {table.getFlatHeaders().map((header) => {
         const text = header.getContext().column.columnDef.header;
 
@@ -18,6 +23,6 @@ export function EditTableColumnHeaders({ table }: EditTableColumnHeadersProps) {
           </EditTableCell>
         );
       })}
-    </Flex>
+    </Box>
   );
 }

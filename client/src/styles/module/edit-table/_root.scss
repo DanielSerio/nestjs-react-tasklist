@@ -4,6 +4,8 @@ main:has(.edit-table),
 }
 
 .edit-table {
+  container-name: edit-table;
+  container-type: size;
   position: absolute;
   height: calc(100% - 48px); // remove header height
   width: 100%;

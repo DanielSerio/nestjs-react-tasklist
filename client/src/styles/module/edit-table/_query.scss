@@ -1,0 +1,6 @@
+// Small screens
+@container edit-table (max-width: 640px) {
+  .column-headers {
+    display: none;
+  }
+}
