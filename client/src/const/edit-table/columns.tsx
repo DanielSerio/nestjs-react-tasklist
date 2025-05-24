@@ -9,6 +9,7 @@ const defaultColumns: ColumnDef<EditTableEntity>[] = [
   {
     header: "ID",
     accessorKey: "id",
+    id: "id",
     size: 30,
     enableResizing: false,
     enableSorting: false,
@@ -17,6 +18,7 @@ const defaultColumns: ColumnDef<EditTableEntity>[] = [
   {
     header: "Name",
     accessorKey: "name",
+    id: "name",
     size: 250,
     enableResizing: false,
     enableSorting: true,
@@ -25,12 +27,14 @@ const defaultColumns: ColumnDef<EditTableEntity>[] = [
   {
     header: "Created At",
     accessorKey: "createdAt",
+    id: "createdAt",
     accessorFn: (row) => row.createdAt.toLocaleString(),
     size: 120,
   },
   {
     header: "Updated At",
     accessorKey: "updatedAt",
+    id: "updatedAt",
     accessorFn: (row) =>
       row.updatedAt ? row.updatedAt.toLocaleString() : null,
     size: 120,

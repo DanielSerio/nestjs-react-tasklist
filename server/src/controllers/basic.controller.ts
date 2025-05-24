@@ -1,5 +1,5 @@
 import { BadRequestException, InternalServerErrorException } from "@nestjs/common";
-import { FindManyOptions } from "typeorm";
+import { FindManyOptions, FindOptionsOrder } from "typeorm";
 import { ZodError, ZodSchema } from "zod";
 
 export interface BasicControllerArgs<CreateDto, UpdateDto> {
@@ -60,6 +60,25 @@ export abstract class BasicController<CreateDto, UpdateDto, RecordType> {
     throw new InternalServerErrorException(err);
   }
 
+  private processSorting(pSort: string | null) {
+    if (pSort == null || pSort === 'null') {
+      return null;
+    }
+
+    const decoded = decodeURIComponent(pSort ?? '');
+
+    if (!decoded) {
+      return null;
+    }
+
+    return JSON.parse(decoded).reduce(({ }, strVal) => {
+      const [field, dir] = strVal.split(/[_]/g);
+      return {
+        [field]: (dir === 'asc' ? 'asc' : 'desc') as 'ASC' | "DESC"
+      };
+    }, {} satisfies FindOptionsOrder<RecordType>);
+  }
+
   protected extractListParamsFromURL(url: string): FindManyOptions<RecordType> {
     const parsableUrl = new URL(`http://localhost:3000${url}`);
     const searchParams = parsableUrl.searchParams;
@@ -67,13 +86,14 @@ export abstract class BasicController<CreateDto, UpdateDto, RecordType> {
     const pLimit = searchParams.get('limit');
     const pOffset = searchParams.get('offset');
     const pSort = searchParams.get('sort');
+    //TODO: Filter need to be processed to integrate with the ORM here
     const pFilter = searchParams.get('filter');
 
     return {
       take: this.getQueryInt(pLimit),
       skip: this.getQueryInt(pOffset),
-      order: pSort ? JSON.parse(decodeURIComponent(pSort)) : null,
-      where: pFilter ? JSON.parse(decodeURIComponent(pFilter)) : null
+      order: this.processSorting(pSort) ?? undefined,
+      //where: pFilter ? JSON.parse(decodeURIComponent(pFilter)) : null
     };
   }
 }

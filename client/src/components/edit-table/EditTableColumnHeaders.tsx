@@ -2,6 +2,7 @@ import { Box } from "@mantine/core";
 import type { useEditTableContext } from "./edit-table.provider";
 import { EditTableCell } from "./EditTableCell";
 import { LayoutHelpers } from "#utilities/layout.helpers";
+import { EditTableSortControl } from "./EditTableSortControl";
 
 export interface EditTableColumnHeadersProps {
   table: ReturnType<typeof useEditTableContext>[0]["table"];
@@ -19,7 +20,9 @@ export function EditTableColumnHeaders({ table }: EditTableColumnHeadersProps) {
 
         return (
           <EditTableCell key={header.id} label={text as string}>
-            {header.isPlaceholder ? null : (text as string)}
+            {header.isPlaceholder ? null : (
+              <EditTableSortControl label={text as string} column={header.id} />
+            )}
           </EditTableCell>
         );
       })}

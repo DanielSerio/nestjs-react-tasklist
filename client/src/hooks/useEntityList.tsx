@@ -78,7 +78,7 @@ function getSortingChunk(sort?: SortingState | null) {
     return nullValue;
   }
 
-  return `sort=${JSON.stringify(sortStrings)}`;
+  return `sort=${encodeURIComponent(JSON.stringify(sortStrings))}`;
 }
 
 function getFilteringChunk(filter?: ColumnFiltersState | null) {
@@ -96,7 +96,7 @@ function getFilteringChunk(filter?: ColumnFiltersState | null) {
     return nullValue;
   }
 
-  return `filter=${JSON.stringify(filterStrings)}`;
+  return `filter=${encodeURIComponent(JSON.stringify(filterStrings))}`;
 }
 
 function getGlobalSearchChunk(search?: string | null) {
