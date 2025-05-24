@@ -5,7 +5,11 @@ import {
   type PropsWithChildren,
 } from "react";
 import { EDIT_TABLE_COLUMNS, type EditTableEntity } from "#const/edit-table";
-import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import {
+  getCoreRowModel,
+  useReactTable,
+  type SortingState,
+} from "@tanstack/react-table";
 import { useEntityList } from "#hooks/useEntityList";
 import type {
   EditTableContextMethods,
@@ -24,6 +28,11 @@ import {
   removeSortReducer,
   setSortReducer,
 } from "./reducer/sorting";
+import {
+  addFilterReducer,
+  removeFilterReducer,
+  setFilterReducer,
+} from "./reducer/filtering";
 
 const EditTableContext = createContext<EditTableContextType>([
   {
@@ -52,6 +61,12 @@ function reducer(state: EditTableContextState, action: EditTableReducerAction) {
       return removeSortReducer(state, action);
     case "set-sort":
       return setSortReducer(state, action);
+    case "add-filter":
+      return addFilterReducer(state, action);
+    case "remove-filter":
+      return removeFilterReducer(state, action);
+    case "set-filter":
+      return setFilterReducer(state, action);
     default:
       return state;
   }
@@ -96,6 +111,16 @@ export const EditTableProvider = ({
       dispatch({ name: "set-offset", payload: offset }),
     addSorting: (column: string, desc: boolean) =>
       dispatch({ name: "add-sort", payload: { id: column, desc } }),
+    removeSorting: (column: string) =>
+      dispatch({ name: "remove-sort", payload: column }),
+    setSorting: (sort: SortingState | null) =>
+      dispatch({ name: "set-sort", payload: sort }),
+    addFilter: (column: string, value: unknown) =>
+      dispatch({ name: "add-filter", payload: { id: column, value } }),
+    removeFilter: (column: string) =>
+      dispatch({ name: "remove-filter", payload: column }),
+    setFilter: (filter: unknown) =>
+      dispatch({ name: "set-filter", payload: filter }),
   };
   return (
     <EditTableContext.Provider

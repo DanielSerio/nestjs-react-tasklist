@@ -4,6 +4,7 @@ import type { ETGlobalSearchAction } from "./reducer/global-search";
 import type { ETSelectAction } from "./reducer/select";
 import type { ETPagingLimitAction, ETPagingOffsetAction } from "./reducer/paging";
 import type { ETAddSortAction, ETRemoveSortAction, ETSetSortAction } from "./reducer/sorting";
+import type { ETAddFilterAction, ETRemoveFilterAction, ETSetFilterAction } from "./reducer/filtering";
 
 export type EditTableEndpoint = "statuses" | "categories";
 
@@ -44,13 +45,17 @@ export type EditTableContextType = [
 ];
 
 
-export type ETActionName = 'set-search' | 'set-select' | 'set-limit' | 'set-offset' | 'add-sort' | 'remove-sort' | 'set-sort';
+export type ETActionName = 'set-search' | 'set-select' | 'set-limit' |
+  'set-offset' | 'add-sort' | 'remove-sort' | 'set-sort' | 'set-filter' |
+  'add-filter' | 'remove-filter';
 
 export interface ETAction {
   name: ETActionName;
-  payload?: any;
+  payload: any;
 }
 
 export type EditTableReducerAction = ETAction & (
-  ETGlobalSearchAction | ETSelectAction | ETPagingLimitAction | ETPagingOffsetAction | ETSetSortAction | ETAddSortAction | ETRemoveSortAction
+  ETGlobalSearchAction | ETSelectAction | ETPagingLimitAction |
+  ETPagingOffsetAction | ETSetSortAction | ETAddSortAction | ETRemoveSortAction |
+  ETSetFilterAction | ETAddFilterAction | ETRemoveFilterAction
 );
