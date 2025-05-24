@@ -4,12 +4,12 @@ import {
   useReducer,
   type PropsWithChildren,
 } from "react";
-import { EDIT_TABLE_COLUMNS, type EditTableEntity } from "#const/edit-table";
 import {
   getCoreRowModel,
   useReactTable,
   type SortingState,
 } from "@tanstack/react-table";
+import { EDIT_TABLE_COLUMNS, type EditTableEntity } from "#const/edit-table";
 import { useEntityList } from "#hooks/useEntityList";
 import type {
   EditTableContextMethods,
