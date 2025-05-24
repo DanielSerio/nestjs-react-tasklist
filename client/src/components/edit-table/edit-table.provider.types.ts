@@ -5,6 +5,7 @@ import type { ETSelectAction } from "./reducer/select";
 import type { ETPagingLimitAction, ETPagingOffsetAction } from "./reducer/paging";
 import type { ETAddSortAction, ETRemoveSortAction, ETSetSortAction } from "./reducer/sorting";
 import type { ETAddFilterAction, ETRemoveFilterAction, ETSetFilterAction } from "./reducer/filtering";
+import type { useEntityList } from "#hooks/useEntityList";
 
 export type EditTableEndpoint = "statuses" | "categories";
 
@@ -21,7 +22,9 @@ export interface EditTableContextState {
 export interface EditTableContextObject {
   state: EditTableContextState;
   table: ReturnType<typeof useReactTable<EditTableEntity>>;
+  query: ReturnType<typeof useEntityList>;
 }
+
 export interface EditTableContextMethods {
   // Search methods
   setGlobalSearch: (search: string) => void;
@@ -43,7 +46,6 @@ export type EditTableContextType = [
   EditTableContextObject,
   EditTableContextMethods,
 ];
-
 
 export type ETActionName = 'set-search' | 'set-select' | 'set-limit' |
   'set-offset' | 'add-sort' | 'remove-sort' | 'set-sort' | 'set-filter' |

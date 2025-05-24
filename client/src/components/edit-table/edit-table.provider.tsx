@@ -40,6 +40,7 @@ const EditTableContext = createContext<EditTableContextType>([
       endpoint: "statuses",
     },
     table: {} as ReturnType<typeof useReactTable<EditTableEntity>>,
+    query: {} as ReturnType<typeof useEntityList>,
   },
   initialMethods,
 ]);
@@ -127,6 +128,7 @@ export const EditTableProvider = ({
         {
           state,
           table,
+          query,
         },
         methods,
       ]}
