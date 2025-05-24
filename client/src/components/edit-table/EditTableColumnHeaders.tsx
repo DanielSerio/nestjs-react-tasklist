@@ -1,4 +1,4 @@
-import { Box, Flex } from "@mantine/core";
+import { Box } from "@mantine/core";
 import type { useEditTableContext } from "./edit-table.provider";
 import { EditTableCell } from "./EditTableCell";
 import { LayoutHelpers } from "#utilities/layout.helpers";
