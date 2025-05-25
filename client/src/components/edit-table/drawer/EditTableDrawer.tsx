@@ -33,15 +33,22 @@ export function EditTableDrawer({
       onClose={closeDrawer}
     >
       <Drawer.Body>
-        {mode === "create" && <EditTableCreateForm endpoint={endpoint} />}
+        {mode === "create" && (
+          <EditTableCreateForm endpoint={endpoint} onClose={closeDrawer} />
+        )}
         {mode === "update" && state && (
           <EditTableUpdateForm
             endpoint={endpoint}
             state={state as EditTableEntity}
+            onClose={closeDrawer}
           />
         )}
         {mode === "delete" && state && (
-          <EditTableDeleteForm endpoint={endpoint} state={state as number} />
+          <EditTableDeleteForm
+            endpoint={endpoint}
+            state={state as number}
+            onClose={closeDrawer}
+          />
         )}
       </Drawer.Body>
     </Drawer>
