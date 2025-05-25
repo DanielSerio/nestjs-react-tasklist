@@ -9,7 +9,7 @@ export function EditTable({ endpoint }: { endpoint: EditTableEndpoint }) {
     <EditTableProvider endpoint={endpoint}>
       <Box className={`edit-table ${endpoint}`}>
         <Flex className="edit-table-container" direction="column">
-          <EditTableHeader />
+          <EditTableHeader endpoint={endpoint} />
           <EditTableBody endpoint={endpoint} />
         </Flex>
       </Box>
