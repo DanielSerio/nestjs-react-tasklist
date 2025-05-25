@@ -7,23 +7,36 @@ import { EditTableConfigModal } from "./modal/EditTableConfigModal";
 import { useDisclosure } from "@mantine/hooks";
 import { useEditTableDrawer } from "#hooks/edit-table/useEditTableDrawer";
 import { EditTableDrawer } from "./drawer/EditTableDrawer";
+import type { EditTableEntity } from "#const/edit-table";
 
 export function EditTable({ endpoint }: { endpoint: EditTableEndpoint }) {
   const configModalController = useDisclosure();
   const [isOpen, { close, open }] = configModalController;
   const drawerController = useEditTableDrawer({ endpoint });
-  const launchCreateDrawer = () => {
-    const methods = drawerController[1];
+  const methods = drawerController[1];
 
+  const launchCreateDrawer = () =>
     methods.openDrawer({
       mode: "create",
     });
-  };
+
+  const launchUpdateDrawer = (record: EditTableEntity) =>
+    methods.openDrawer({
+      mode: "update",
+      payload: record,
+    });
+
+  const launchDeleteDrawer = (id: number) =>
+    methods.openDrawer({
+      mode: "delete",
+      payload: id,
+    });
 
   return (
     <EditTableProvider endpoint={endpoint}>
       <EditTableConfigModal isOpen={isOpen} close={close} />
       <EditTableDrawer controller={drawerController} />
+
       <Box className={`edit-table ${endpoint}`}>
         <Flex className="edit-table-container" direction="column">
           <EditTableHeader
@@ -31,7 +44,11 @@ export function EditTable({ endpoint }: { endpoint: EditTableEndpoint }) {
             launchConfigModal={() => open()}
             launchCreateDrawer={launchCreateDrawer}
           />
-          <EditTableBody endpoint={endpoint} />
+          <EditTableBody
+            endpoint={endpoint}
+            launchUpdateDrawer={launchUpdateDrawer}
+            launchDeleteDrawer={launchDeleteDrawer}
+          />
         </Flex>
       </Box>
     </EditTableProvider>

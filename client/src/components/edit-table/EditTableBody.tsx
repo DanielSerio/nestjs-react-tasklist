@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+import { TbTrash } from "react-icons/tb";
 import { ActionIcon, Box, Text } from "@mantine/core";
 import { LayoutHelpers } from "#utilities/layout.helpers";
 import { useEditTableContext } from "./edit-table.provider";
@@ -5,11 +7,20 @@ import { EditTableSkeletonRow } from "./EditTableSkeletonRow";
 import type { EditTableEndpoint } from "./edit-table.provider.types";
 import { EditTableRow } from "./EditTableRow";
 import { EditTableCell } from "./EditTableCell";
-import type { ReactNode } from "react";
-import { TbTrash } from "react-icons/tb";
 import { PseudoLink } from "#components/core/utility/PseudoLink";
+import type { EditTableEntity } from "#const/edit-table";
 
-export function EditTableBody({ endpoint }: { endpoint: EditTableEndpoint }) {
+export interface EditTableBodyProps {
+  endpoint: EditTableEndpoint;
+  launchUpdateDrawer: (record: EditTableEntity) => void;
+  launchDeleteDrawer: (id: number) => void;
+}
+
+export function EditTableBody({
+  endpoint,
+  launchUpdateDrawer,
+  launchDeleteDrawer,
+}: EditTableBodyProps) {
   const [{ table, query }] = useEditTableContext();
   const { gridTemplateColumns } = LayoutHelpers.getGridColumnProfile(
     table.getAllColumns().map((col) => col.columnDef)
@@ -66,7 +77,13 @@ export function EditTableBody({ endpoint }: { endpoint: EditTableEndpoint }) {
                     key={cell.id}
                     label={cell.column.columnDef.header as string}
                   >
-                    <ActionIcon mt={3} size="xs" color="red" variant="subtle">
+                    <ActionIcon
+                      mt={3}
+                      size="xs"
+                      color="red"
+                      variant="subtle"
+                      onClick={() => launchDeleteDrawer(row.original.id)}
+                    >
                       <TbTrash />
                     </ActionIcon>
                   </EditTableCell>
@@ -78,7 +95,9 @@ export function EditTableBody({ endpoint }: { endpoint: EditTableEndpoint }) {
                   key={cell.id}
                   label={cell.column.columnDef.header as string}
                 >
-                  <PseudoLink>{cell.renderValue() as ReactNode}</PseudoLink>
+                  <PseudoLink onClick={() => launchUpdateDrawer(row.original)}>
+                    {cell.renderValue() as ReactNode}
+                  </PseudoLink>
                 </EditTableCell>
               );
             })}
