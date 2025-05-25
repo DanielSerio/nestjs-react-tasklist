@@ -18,6 +18,14 @@ export function EditTableColumnHeaders({ table }: EditTableColumnHeadersProps) {
       {table.getFlatHeaders().map((header) => {
         const text = header.getContext().column.columnDef.header;
 
+        if (text === "Actions") {
+          return (
+            <EditTableCell key={header.id} label={text as string}>
+              {header.isPlaceholder ? null : text}
+            </EditTableCell>
+          );
+        }
+
         return (
           <EditTableCell key={header.id} label={text as string}>
             {header.isPlaceholder ? null : (
