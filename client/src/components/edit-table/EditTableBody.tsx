@@ -1,4 +1,4 @@
-import { Box, Text } from "@mantine/core";
+import { ActionIcon, Box, Text } from "@mantine/core";
 import { LayoutHelpers } from "#utilities/layout.helpers";
 import { useEditTableContext } from "./edit-table.provider";
 import { EditTableSkeletonRow } from "./EditTableSkeletonRow";
@@ -6,6 +6,8 @@ import type { EditTableEndpoint } from "./edit-table.provider.types";
 import { EditTableRow } from "./EditTableRow";
 import { EditTableCell } from "./EditTableCell";
 import type { ReactNode } from "react";
+import { TbTrash } from "react-icons/tb";
+import { PseudoLink } from "#components/core/utility/PseudoLink";
 
 export function EditTableBody({ endpoint }: { endpoint: EditTableEndpoint }) {
   const [{ table, query }] = useEditTableContext();
@@ -56,12 +58,27 @@ export function EditTableBody({ endpoint }: { endpoint: EditTableEndpoint }) {
         return (
           <EditTableRow key={row.id} gridTemplateColumns={gridTemplateColumns}>
             {row.getVisibleCells().map((cell) => {
+              const columnID = cell.getContext().column.columnDef.id;
+
+              if (columnID === "actions") {
+                return (
+                  <EditTableCell
+                    key={cell.id}
+                    label={cell.column.columnDef.header as string}
+                  >
+                    <ActionIcon mt={3} size="xs" color="red" variant="subtle">
+                      <TbTrash />
+                    </ActionIcon>
+                  </EditTableCell>
+                );
+              }
+
               return (
                 <EditTableCell
                   key={cell.id}
                   label={cell.column.columnDef.header as string}
                 >
-                  {cell.renderValue() as ReactNode}
+                  <PseudoLink>{cell.renderValue() as ReactNode}</PseudoLink>
                 </EditTableCell>
               );
             })}
