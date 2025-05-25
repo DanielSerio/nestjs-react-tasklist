@@ -7,11 +7,13 @@ import type { EditTableEndpoint } from "./edit-table.provider.types";
 export interface EditTableHeaderProps {
   endpoint: EditTableEndpoint;
   launchConfigModal: () => void;
+  launchCreateDrawer: () => void;
 }
 
 export function EditTableHeader({
   endpoint,
   launchConfigModal,
+  launchCreateDrawer,
 }: EditTableHeaderProps) {
   const [{ table }] = useEditTableContext();
 
@@ -20,6 +22,7 @@ export function EditTableHeader({
       <EditTableToolBar
         endpoint={endpoint}
         launchConfigModal={launchConfigModal}
+        launchCreateDrawer={launchCreateDrawer}
       />
       <EditTableColumnHeaders table={table} />
     </Flex>

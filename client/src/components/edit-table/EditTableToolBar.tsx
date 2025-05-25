@@ -9,6 +9,7 @@ export interface EditTableToolBarProps extends EditTableHeaderProps {}
 export function EditTableToolBar({
   endpoint,
   launchConfigModal,
+  launchCreateDrawer,
 }: EditTableToolBarProps) {
   return (
     <header className="edit-table-toolbar">
@@ -27,6 +28,7 @@ export function EditTableToolBar({
             title={`Add ${getSingularNameFromEndpoint(endpoint)}`}
             variant="light"
             color="blue"
+            onClick={launchCreateDrawer}
           >
             <TbPlus />
           </ActionIcon>
