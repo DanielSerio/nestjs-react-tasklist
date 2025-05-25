@@ -9,6 +9,7 @@ import { BASE_URL } from "#const/api";
 import { getSingularNameFromEndpoint } from "#utilities/entity.helpers";
 import { Button, Flex, Group, Loader, TextInput } from "@mantine/core";
 import { TbDeviceFloppy } from "react-icons/tb";
+import type { ZodError } from "zod";
 
 export function EditTableUpdateForm({
   endpoint,
@@ -52,7 +53,7 @@ export function EditTableUpdateForm({
 
       notifications.show({
         title: `Success`,
-        message: `Created ${getSingularNameFromEndpoint(endpoint)}`,
+        message: `Updated ${getSingularNameFromEndpoint(endpoint)}`,
       });
 
       onClose();
@@ -60,7 +61,7 @@ export function EditTableUpdateForm({
       notifications.show({
         color: "red",
         title: `Create Error`,
-        message: (err as Error).message,
+        message: (err as Error).message ?? (err as ZodError).issues[0]!.message,
       });
     }
   };

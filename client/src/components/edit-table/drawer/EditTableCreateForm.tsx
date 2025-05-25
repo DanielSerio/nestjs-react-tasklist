@@ -9,6 +9,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BASE_URL } from "#const/api";
 import type { EditTableEntity } from "#const/edit-table";
 import { getSingularNameFromEndpoint } from "#utilities/entity.helpers";
+import type { ZodError } from "zod";
 
 export function EditTableCreateForm({
   endpoint,
@@ -62,7 +63,7 @@ export function EditTableCreateForm({
       notifications.show({
         color: "red",
         title: `Create Error`,
-        message: (err as Error).message,
+        message: (err as Error).message ?? (err as ZodError).issues[0]!.message,
       });
     }
   };
