@@ -19,7 +19,7 @@ import { getSingularNameFromEndpoint } from "#utilities/entity.helpers";
 
 export function EditTableDeleteForm({
   endpoint,
-  state: id,
+  state,
   onClose,
 }: EditTableDeleteModalFormProps) {
   const queryClient = useQueryClient();
@@ -45,9 +45,9 @@ export function EditTableDeleteForm({
   });
 
   const mutation = useMutation({
-    mutationKey: [endpoint, "delete", id],
+    mutationKey: [endpoint, "delete", state.id],
     async mutationFn() {
-      return await fetch(`${BASE_URL}/task-${endpoint}/${id}`, {
+      return await fetch(`${BASE_URL}/task-${endpoint}/${state.id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -90,7 +90,9 @@ export function EditTableDeleteForm({
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
       <Box py="xs">
-        <Text>Are you sure you want to delete "{id}"?</Text>
+        <Text>
+          Are you sure you want to delete "<strong>{state.name}</strong>"?
+        </Text>
       </Box>
       <Flex direction="column">
         <Checkbox label="I'm Sure" required {...form.getInputProps("imSure")} />

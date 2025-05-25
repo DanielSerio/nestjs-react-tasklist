@@ -1,9 +1,10 @@
 import type { EditTableEntity } from "#const/edit-table";
+import type { EditTableDeletePayload } from "#hooks/edit-table/useEditTableDrawer";
 import type { EditTableEndpoint } from "../edit-table.provider.types";
 
 export interface EditTableModalFormPropsBasis {
   endpoint: EditTableEndpoint;
-  state?: EditTableEntity | number;
+  state?: EditTableEntity | EditTableDeletePayload;
   onClose: () => void;
 }
 
@@ -19,5 +20,5 @@ export interface EditTableUpdateModalFormProps extends EditTableModalFormPropsBa
 
 export interface EditTableDeleteModalFormProps extends EditTableModalFormPropsBasis {
   endpoint: EditTableEndpoint;
-  state: number;
+  state: EditTableDeletePayload;
 }

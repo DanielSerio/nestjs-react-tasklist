@@ -5,7 +5,10 @@ import { EditTableProvider } from "./edit-table.provider";
 import type { EditTableEndpoint } from "./edit-table.provider.types";
 import { EditTableConfigModal } from "./modal/EditTableConfigModal";
 import { useDisclosure } from "@mantine/hooks";
-import { useEditTableDrawer } from "#hooks/edit-table/useEditTableDrawer";
+import {
+  useEditTableDrawer,
+  type EditTableDeletePayload,
+} from "#hooks/edit-table/useEditTableDrawer";
 import { EditTableDrawer } from "./drawer/EditTableDrawer";
 import type { EditTableEntity } from "#const/edit-table";
 
@@ -26,10 +29,10 @@ export function EditTable({ endpoint }: { endpoint: EditTableEndpoint }) {
       payload: record,
     });
 
-  const launchDeleteDrawer = (id: number) =>
+  const launchDeleteDrawer = (pl: EditTableDeletePayload) =>
     methods.openDrawer({
       mode: "delete",
-      payload: id,
+      payload: pl,
     });
 
   return (

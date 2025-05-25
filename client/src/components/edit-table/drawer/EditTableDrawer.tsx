@@ -1,4 +1,7 @@
-import type { useEditTableDrawer } from "#hooks/edit-table/useEditTableDrawer";
+import type {
+  EditTableDeletePayload,
+  useEditTableDrawer,
+} from "#hooks/edit-table/useEditTableDrawer";
 import { Drawer } from "@mantine/core";
 import { EditTableCreateForm } from "./EditTableCreateForm";
 import { EditTableUpdateForm } from "./EditTableUpdateForm";
@@ -46,7 +49,7 @@ export function EditTableDrawer({
         {mode === "delete" && state && (
           <EditTableDeleteForm
             endpoint={endpoint}
-            state={state as number}
+            state={state as EditTableDeletePayload}
             onClose={closeDrawer}
           />
         )}

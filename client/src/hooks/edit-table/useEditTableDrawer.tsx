@@ -3,10 +3,15 @@ import type { EditTableEntity } from "#const/edit-table";
 import { useDisclosure } from "@mantine/hooks";
 import { useCallback, useState } from "react";
 
+export interface EditTableDeletePayload {
+  id: number;
+  name: string;
+}
+
 export type EditTableDrawerMode = "create" | "update" | "delete";
 interface EditTableDrawerPayloadBasis {
   mode: EditTableDrawerMode;
-  payload?: EditTableEntity | number;
+  payload?: EditTableEntity | EditTableDeletePayload;
 }
 
 interface EditTableDrawerCreatePayload extends EditTableDrawerPayloadBasis {
@@ -19,7 +24,7 @@ interface EditTableDrawerUpdatePayload extends EditTableDrawerPayloadBasis {
 }
 interface EditTableDrawerDeletePayload extends EditTableDrawerPayloadBasis {
   mode: "delete";
-  payload: number;
+  payload: EditTableDeletePayload;
 }
 
 export type EditTablePayload =

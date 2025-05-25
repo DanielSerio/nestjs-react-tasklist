@@ -9,11 +9,12 @@ import { EditTableRow } from "./EditTableRow";
 import { EditTableCell } from "./EditTableCell";
 import { PseudoLink } from "#components/core/utility/PseudoLink";
 import type { EditTableEntity } from "#const/edit-table";
+import type { EditTableDeletePayload } from "#hooks/edit-table/useEditTableDrawer";
 
 export interface EditTableBodyProps {
   endpoint: EditTableEndpoint;
   launchUpdateDrawer: (record: EditTableEntity) => void;
-  launchDeleteDrawer: (id: number) => void;
+  launchDeleteDrawer: (pl: EditTableDeletePayload) => void;
 }
 
 export function EditTableBody({
@@ -82,7 +83,12 @@ export function EditTableBody({
                       size="xs"
                       color="red"
                       variant="subtle"
-                      onClick={() => launchDeleteDrawer(row.original.id)}
+                      onClick={() =>
+                        launchDeleteDrawer({
+                          id: row.original.id,
+                          name: row.original.name,
+                        })
+                      }
                     >
                       <TbTrash />
                     </ActionIcon>

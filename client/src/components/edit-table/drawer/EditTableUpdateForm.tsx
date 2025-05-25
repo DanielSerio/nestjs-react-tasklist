@@ -30,7 +30,7 @@ export function EditTableUpdateForm({
     mutationKey: [endpoint, "update", state.id],
     async mutationFn(values: Partial<EditTableEntity>) {
       return await fetch(`${BASE_URL}/task-${endpoint}/${state.id}`, {
-        method: "PUT",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
