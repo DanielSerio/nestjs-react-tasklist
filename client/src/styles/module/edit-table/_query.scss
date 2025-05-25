@@ -12,6 +12,14 @@
     display: flex;
     flex-direction: column;
 
+    .cell {
+      border-right: none;
+
+      &:not(:last-child) .value {
+        border-bottom: 1px dotted var(--mantine-color-default-border);
+      }
+    }
+
     .cell .label {
       display: block;
       min-width: 16ch;
