@@ -1,10 +1,31 @@
 // Small screens
-@container edit-table (max-width: 640px) {
+@container edit-table (max-width: 875px) {
   .column-headers {
     display: none;
   }
 
   .edit-table-container > header {
     padding: 12px; // offset for .column-headers
+  }
+
+  .edit-table-container .row {
+    display: flex;
+    flex-direction: column;
+
+    .cell .label {
+      display: block;
+      min-width: 16ch;
+    }
+
+    .cell .value {
+      width: auto;
+      flex: 1;
+
+      &.align-center {
+        .mantine-Skeleton-root {
+          margin: 0;
+        }
+      }
+    }
   }
 }

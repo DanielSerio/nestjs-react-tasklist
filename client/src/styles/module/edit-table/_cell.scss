@@ -10,6 +10,18 @@
     }
   }
 
+  .cell {
+    height: 24px;
+
+    .value.align-center {
+      text-align: center;
+
+      .mantine-Skeleton-root {
+        margin: 0 auto;
+      }
+    }
+  }
+
   .cell:not(:last-of-type) {
     border-right: 1px solid var(--mantine-color-default-border);
   }
@@ -17,5 +29,13 @@
   .cell > .label,
   .cell > .value {
     padding: 0 4px;
+  }
+
+  .cell > .value {
+    width: 100%;
+  }
+
+  .cell > .label {
+    display: none;
   }
 }

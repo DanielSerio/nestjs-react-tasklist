@@ -1,17 +1,14 @@
 import { Box, Flex } from "@mantine/core";
-import React, {
-  forwardRef,
-  type AreaHTMLAttributes,
-  type ForwardedRef,
-} from "react";
+import { forwardRef, type AreaHTMLAttributes, type ForwardedRef } from "react";
 
 export interface EditTableCellComponentProps
   extends AreaHTMLAttributes<HTMLDivElement> {
   label: string;
+  align?: "left" | "center" | "right";
 }
 
 function EditTableCellComponent(
-  { label, children, ...props }: EditTableCellComponentProps,
+  { label, align, children, ...props }: EditTableCellComponentProps,
   ref?: ForwardedRef<HTMLDivElement>
 ) {
   return (
@@ -19,7 +16,10 @@ function EditTableCellComponent(
       <Box className="label" component="span">
         {label}
       </Box>
-      <Box className="value" component="span">
+      <Box
+        className={`value${align ? ` align-${align}` : ""}`}
+        component="span"
+      >
         {children}
       </Box>
     </Flex>

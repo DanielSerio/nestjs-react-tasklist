@@ -5,7 +5,13 @@ import type { Pretty } from "#types/utility.types";
 
 export type EditTableEntity = Pretty<TaskStatus & TaskCategory>;
 
-const defaultColumns: ColumnDef<EditTableEntity>[] = [
+type ColumnDefWithMeta = ColumnDef<EditTableEntity> & {
+  meta?: {
+    align?: "left" | "center" | "right";
+  };
+};
+
+const defaultColumns: ColumnDefWithMeta[] = [
   {
     header: "ID",
     accessorKey: "id",
@@ -14,6 +20,9 @@ const defaultColumns: ColumnDef<EditTableEntity>[] = [
     enableResizing: false,
     enableSorting: false,
     enableColumnFilter: false,
+    meta: {
+      align: "center",
+    },
   },
   {
     header: "Name",
