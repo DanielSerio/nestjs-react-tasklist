@@ -15,6 +15,12 @@ export abstract class BasicService
     protected dataSource: DataSource
   ) { }
 
+  /**
+   * Returns a `FindOptionsWhere` object based on the input criteria.
+   * @param {number | FindOptionsWhere<Entity>} criteria - The `criteria` for the search. `number` | `FindOptionsWhere<Entity>`
+   * .
+   * @returns `FindOptionsWhere<Entity>`
+   */
   private getWhereFromCriteria(criteria: number | FindOptionsWhere<Entity>): FindOptionsWhere<Entity> {
     let where = {};
 
