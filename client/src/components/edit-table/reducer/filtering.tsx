@@ -7,6 +7,17 @@ import type {
 interface FilterValue {
   id: string;
   value: unknown;
+  operator:
+    | "ct"
+    | "sw"
+    | "ew"
+    | "eq"
+    | "gt"
+    | "gte"
+    | "lt"
+    | "lte"
+    | "in"
+    | "nin";
 }
 
 export interface ETAddFilterAction extends ETAction {
