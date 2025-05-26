@@ -1,4 +1,3 @@
-import type { ColumnFiltersState } from "@tanstack/react-table";
 import type {
   EditTableContextState,
   ETAction,
@@ -22,6 +21,12 @@ interface FilterValue {
   value: unknown;
   operator: FilterOperator;
 }
+
+export type ColumnFilter<T> = {
+  id: string;
+  value: T;
+  operator: FilterOperator;
+};
 
 export interface EditTableFilterValue<T> extends FilterValue {
   value: T;

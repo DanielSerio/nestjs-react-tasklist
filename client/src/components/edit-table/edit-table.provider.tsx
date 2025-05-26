@@ -16,7 +16,6 @@ import type {
   EditTableContextMethods,
   EditTableContextState,
   EditTableContextType,
-  EditTableEndpoint,
   EditTableReducerAction,
 } from "./edit-table.provider.types";
 import { initialMethods, initialState } from "./edit-table.const";
@@ -42,6 +41,7 @@ import {
   setFilterReducer,
 } from "./reducer/filtering";
 import { useUrlStateMirror } from "#hooks/useURLStateMirror";
+import type { EditTableDefaults } from "./EditTable";
 
 const EditTableContext = createContext<EditTableContextType>([
   {
@@ -98,17 +98,16 @@ export const EditTableProvider = ({
   endpoint,
   limit = 25,
   offset = 0,
-}: PropsWithChildren<{
-  endpoint: EditTableEndpoint;
-  limit?: number;
-  offset?: number;
-}>) => {
-  //TODO: initialState should be set from url params once url state mirroring is implemented
+  sort = [],
+  filter = [],
+}: PropsWithChildren<EditTableDefaults>) => {
   const [state, dispatch] = useReducer(reducer, {
     ...initialState,
     endpoint,
     limit,
     offset,
+    sort,
+    filter,
   });
   const query = useEntityList({
     endpoint,

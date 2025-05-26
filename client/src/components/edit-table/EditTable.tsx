@@ -11,14 +11,18 @@ import {
 } from "#hooks/edit-table/useEditTableDrawer";
 import { EditTableDrawer } from "./drawer/EditTableDrawer";
 import type { EditTableEntity } from "#const/edit-table";
+import type { ColumnFilter } from "./reducer/filtering";
+import type { ColumnSort } from "@tanstack/react-table";
 
 export interface EditTableDefaults {
   endpoint: EditTableEndpoint;
   limit?: number;
   offset?: number;
+  sort?: ColumnSort[];
+  filter?: ColumnFilter<unknown>[];
 }
 
-export function EditTable({ endpoint, limit, offset }: EditTableDefaults) {
+export function EditTable({ endpoint, ...props }: EditTableDefaults) {
   const configModalController = useDisclosure();
   const [isOpen, { close, open }] = configModalController;
   const drawerController = useEditTableDrawer({ endpoint });
@@ -42,7 +46,7 @@ export function EditTable({ endpoint, limit, offset }: EditTableDefaults) {
     });
 
   return (
-    <EditTableProvider endpoint={endpoint} limit={limit} offset={offset}>
+    <EditTableProvider endpoint={endpoint} {...props}>
       <EditTableConfigModal isOpen={isOpen} close={close} />
       <EditTableDrawer controller={drawerController} />
 
