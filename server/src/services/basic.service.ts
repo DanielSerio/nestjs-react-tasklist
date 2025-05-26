@@ -1,4 +1,5 @@
-import { ParsedQueryFilter, RawQueryFilter } from "#types/query.types";
+import { ParsedQueryFilter, QueryFilterOperator, RawQueryFilter } from "#types/query.types";
+import { TaskCategoryRecord, TaskStatusRecord } from "#types/task.types";
 import { DataSource, EntityTarget, FindOptionsWhere, In, LessThan, LessThanOrEqual, Like, MoreThan, MoreThanOrEqual, Not, ObjectLiteral, Repository } from "typeorm";
 import { z } from "zod";
 
@@ -59,7 +60,7 @@ export abstract class BasicService
       limit: take,
       offset: skip,
       select: params?.select ?? '*',
-      filter: params?.where ?? null,
+      filter: null as null | ParsedQueryFilter<TaskStatusRecord | TaskCategoryRecord>[], //<-- Set before controller returns
       sort: params?.order ?? null,
       totals: {
         records: count,

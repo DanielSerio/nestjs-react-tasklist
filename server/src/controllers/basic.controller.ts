@@ -247,7 +247,7 @@ export abstract class BasicController<CreateDto, UpdateDto, RecordType> {
     }, {} as FindOptionsWhere<RecordType>);
   }
 
-  protected extractListParamsFromURL(url: string): FindManyOptions<RecordType> {
+  protected extractListParamsFromURL(url: string): [FindManyOptions<RecordType>, ParsedQueryFilter<RecordType>[]] {
     const parsableUrl = new URL(`http://localhost:3000${url}`);
     const searchParams = parsableUrl.searchParams;
 
@@ -258,6 +258,9 @@ export abstract class BasicController<CreateDto, UpdateDto, RecordType> {
     const pSearchDecoded = (pSearch && pSearch !== 'null') ? decodeURIComponent(pSearch) : null;
 
     const pFilter = searchParams.get('filter');
+    const parsedFiltersForReturn = (this.extractColumnFilters(pFilter ?? '') ?? [])
+      .map((rf) => this.parseColumnFilter(rf))
+      .filter((pf) => pf !== null);
     const parsedFilters = pFilter ? this.parseColumnFilters(pFilter) : null;
 
     let filters = (parsedFilters ? { where: parsedFilters as FindOptionsWhere<RecordType> | FindOptionsWhere<RecordType>[] } : undefined);
@@ -283,11 +286,14 @@ export abstract class BasicController<CreateDto, UpdateDto, RecordType> {
       };
     }
 
-    return {
-      take: this.getQueryInt(pLimit),
-      skip: this.getQueryInt(pOffset),
-      order: this.processSorting(pSort) ?? undefined,
-      ...filters
-    };
+    return [
+      {
+        take: this.getQueryInt(pLimit),
+        skip: this.getQueryInt(pOffset),
+        order: this.processSorting(pSort) ?? undefined,
+        ...filters
+      },
+      parsedFiltersForReturn as ParsedQueryFilter<RecordType>[]
+    ];
   }
 }

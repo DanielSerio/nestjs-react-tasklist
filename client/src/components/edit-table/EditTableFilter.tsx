@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 export interface EditTableFilterPropsBasis<T> {
   filter: EditTableFilterValue<T>;
   columns: (keyof EditTableEntity | ({} & string))[];
+  disabled?: boolean;
   onChange: (value: EditTableFilterValue<T>) => void;
   onRemove?: () => void;
   onAdd?: () => void;
@@ -31,6 +32,7 @@ export type EditTableFilterProps<T> =
 export function EditTableFilter<T>({
   columns,
   filter,
+  disabled,
   onChange,
   onAdd,
   onRemove,
@@ -163,6 +165,8 @@ export function EditTableFilter<T>({
   return (
     <Group>
       <Select
+        label="Column"
+        disabled={disabled}
         size="xs"
         value={filter.id}
         data={columns}
@@ -177,6 +181,8 @@ export function EditTableFilter<T>({
         }}
       />
       <Select
+        label="Operator"
+        disabled={disabled}
         size="xs"
         value={filter.operator}
         data={filterOptions}
@@ -193,6 +199,8 @@ export function EditTableFilter<T>({
 
       {!!isArrayType ? (
         <TagsInput
+          label="Values"
+          disabled={disabled}
           size="xs"
           type={fieldType}
           data={arrayValues}
@@ -207,6 +215,8 @@ export function EditTableFilter<T>({
         />
       ) : (
         <TextInput
+          label="Value"
+          disabled={disabled}
           size="xs"
           type={fieldType}
           value={`${filter.value}`}
@@ -235,12 +245,24 @@ export function EditTableFilter<T>({
         />
       )}
       {!!onAdd && (
-        <ActionIcon color="blue" variant="light" onClick={onAdd}>
+        <ActionIcon
+          color="blue"
+          variant="light"
+          mb={1}
+          style={{ alignSelf: "flex-end" }}
+          onClick={onAdd}
+        >
           <TbPlus />
         </ActionIcon>
       )}
       {!!onRemove && (
-        <ActionIcon color="red" variant="light" onClick={onRemove}>
+        <ActionIcon
+          color="red"
+          variant="light"
+          mb={1}
+          style={{ alignSelf: "flex-end" }}
+          onClick={onRemove}
+        >
           <TbTrash />
         </ActionIcon>
       )}

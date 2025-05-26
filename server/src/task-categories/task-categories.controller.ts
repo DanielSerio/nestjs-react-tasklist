@@ -28,10 +28,16 @@ export class TaskCategoriesController extends BasicController<CreateTaskCategory
   }
 
   @Get()
-  findAll(@Req() req: Request) {
-    const params = this.extractListParamsFromURL(req.url);
+  async findAll(@Req() req: Request) {
+    const [params, filters] = this.extractListParamsFromURL(req.url);
 
-    return this.taskCategoriesService.findAll(params);
+    const result = await this.taskCategoriesService.findAll(params);
+
+    if (filters && filters.length > 0) {
+      result.filter = filters;
+    }
+
+    return result;
   }
 
   @Get(':id')
