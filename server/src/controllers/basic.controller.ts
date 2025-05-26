@@ -1,6 +1,7 @@
+import { ParsedQueryFilter, RawQueryFilter } from "#types/query.types";
 import { BadRequestException, InternalServerErrorException } from "@nestjs/common";
-import { FindManyOptions, FindOptionsOrder } from "typeorm";
-import { ZodError, ZodSchema } from "zod";
+import { FindManyOptions, FindOptionsOrder, FindOptionsWhere, In, LessThan, LessThanOrEqual, Like, MoreThan, MoreThanOrEqual, Not, Or } from "typeorm";
+import { z, ZodError, ZodSchema } from "zod";
 
 export interface BasicControllerArgs<CreateDto, UpdateDto> {
   createValidator: ZodSchema<CreateDto>;
@@ -79,6 +80,151 @@ export abstract class BasicController<CreateDto, UpdateDto, RecordType> {
     }, {} satisfies FindOptionsOrder<RecordType>);
   }
 
+  private extractColumnFilters(queryText: string): RawQueryFilter[] | null {
+    const decoded = decodeURIComponent(queryText);
+
+    if (!decoded) {
+      return null;
+    }
+
+    return JSON.parse(decoded) as RawQueryFilter[] | null;
+  }
+
+  private parseColumnFilter<FilterValue>(filter: RawQueryFilter): null | ParsedQueryFilter<FilterValue> {
+    const validator = z.object({
+      column: z.string(),
+      operator: z.enum(['ct', 'sw', 'ew', 'eq', 'ne', 'gt', 'gte', 'lt', 'lte', 'in', 'nin']),
+      value: z.union([z.string(), z.number(), z.boolean(), z.object({}), z.array(z.string()), z.array(z.number()), z.array(z.object({}),)])
+    });
+
+    const parsed = validator.safeParse(filter);
+
+    if (!parsed.success) {
+      console.warn('Invalid filter format:', parsed.error);
+
+      return null;
+    }
+
+    return {
+      id: parsed.data.column,
+      operator: parsed.data.operator,
+      value: parsed.data.value as FilterValue
+    };
+  }
+
+  private getLike(code: 'sw' | 'ew' | 'ct', value: string) {
+    let text = `%${value}%`;
+
+    if (code === 'sw') {
+      text = `${value}%`;
+    }
+
+    if (code === 'ew') {
+      text = `%${value}`;
+    }
+
+    return Like(text);
+  }
+
+  private getComparisonOperator(code: 'gt' | 'gte' | 'lt' | 'lte', value: number | Date) {
+    let intValue: number = 0;
+
+    if (!['object', 'number'].includes(typeof value)) {
+      throw new Error(`Invalid value type for comparison operator: ${typeof value}. Expected 'object' or 'number'.`);
+    }
+
+    if (typeof value === 'object' && value instanceof Date) {
+      intValue = value.getTime();
+    }
+
+    if (typeof value === 'number') {
+      intValue = value;
+    }
+
+    switch (code) {
+      case 'gt':
+        return MoreThan(intValue);
+      case 'gte':
+        return MoreThanOrEqual(intValue);
+      case 'lt':
+        return LessThan(intValue);
+      case 'lte':
+        return LessThanOrEqual(intValue);
+      default:
+        throw new Error(`Invalid comparison operator code: ${code}. Expected 'gt', 'gte', 'lt', or 'lte'.`);
+    }
+  }
+
+  private translateColumnFilter<T>(filter: ParsedQueryFilter<T>, where: FindOptionsWhere<RecordType> = {}): FindOptionsWhere<RecordType> {
+    switch (filter.operator) {
+      case 'sw':
+      case 'ew':
+        return {
+          ...where,
+          [filter.id]: this.getLike(filter.operator, `${filter.value}`)
+        };
+      case 'eq':
+        return {
+          ...where,
+          [filter.id]: filter.value
+        };
+      case 'ne':
+        return {
+          ...where,
+          [filter.id]: Not(filter.value)
+        };
+      case 'gt':
+      case 'gte':
+      case 'lt':
+      case 'lte':
+        return {
+          ...where,
+          [filter.id]: this.getComparisonOperator(filter.operator, filter.value as number | Date)
+        };
+      case 'in':
+        return {
+          ...where,
+          [filter.id]: In(Array.isArray(filter.value) ? filter.value : [filter.value])
+        };
+      case 'nin':
+        return {
+          ...where,
+          [filter.id]: Not(In(Array.isArray(filter.value) ? filter.value : [filter.value]))
+        };
+      // default case should just search for the text value  
+      case 'ct':
+      default:
+        return {
+          ...where,
+          [filter.id]: this.getLike('ct', `${filter.value}`)
+        };
+    }
+  }
+
+  /**
+   * Parses and translates column filters from a query text into a FindOptionsWhere object.
+   * @param {string} queryText - The `queryText` parameter in the `parseColumnFilters` function is a
+   * string that contains the filters for columns that need to be parsed and processed.
+   * @returns `FindOptionsWhere<RecordType>`
+   */
+  public parseColumnFilters(queryText: string) {
+    const rawFilters = this.extractColumnFilters(queryText);
+
+    if (!rawFilters) {
+      return null;
+    }
+
+    return rawFilters.reduce((where, rawFilter) => {
+      const parsedFilter = this.parseColumnFilter(rawFilter);
+
+      if (!parsedFilter) {
+        return where; // Skip invalid filters
+      }
+
+      return this.translateColumnFilter(parsedFilter, where);
+    }, {} as FindOptionsWhere<RecordType>);
+  }
+
   protected extractListParamsFromURL(url: string): FindManyOptions<RecordType> {
     const parsableUrl = new URL(`http://localhost:3000${url}`);
     const searchParams = parsableUrl.searchParams;
@@ -86,14 +232,40 @@ export abstract class BasicController<CreateDto, UpdateDto, RecordType> {
     const pLimit = searchParams.get('limit');
     const pOffset = searchParams.get('offset');
     const pSort = searchParams.get('sort');
-    //TODO: Filter need to be processed to integrate with the ORM here
+    const pSearch = searchParams.get('search');
+    const pSearchDecoded = pSearch ? decodeURIComponent(pSearch) : null;
+
     const pFilter = searchParams.get('filter');
+    const parsedFilters = pFilter ? this.parseColumnFilters(pFilter) : null;
+
+    let filters = (parsedFilters ? { where: parsedFilters as FindOptionsWhere<RecordType> | FindOptionsWhere<RecordType>[] } : undefined);
+
+    if (filters && pSearchDecoded) {
+      filters.where = [
+        filters.where,
+        pSearchDecoded ? [
+          { id: Like(`%${pSearchDecoded}%`) },
+          { name: Like(`%${pSearchDecoded}%`) },
+          { createdAt: Like(`%${pSearchDecoded}%`) },
+          { updatedAt: Like(`%${pSearchDecoded}%`) },
+        ] : null
+      ] as FindOptionsWhere<RecordType>[];
+    } else if (!filters && pSearchDecoded) {
+      filters = {
+        where: [
+          { id: Like(`%${pSearchDecoded}%`) },
+          { name: Like(`%${pSearchDecoded}%`) },
+          { createdAt: Like(`%${pSearchDecoded}%`) },
+          { updatedAt: Like(`%${pSearchDecoded}%`) },
+        ] as FindOptionsWhere<RecordType & { updatedAt: Date | null; }>[]
+      };
+    }
 
     return {
       take: this.getQueryInt(pLimit),
       skip: this.getQueryInt(pOffset),
       order: this.processSorting(pSort) ?? undefined,
-      //where: pFilter ? JSON.parse(decodeURIComponent(pFilter)) : null
+      ...filters
     };
   }
 }

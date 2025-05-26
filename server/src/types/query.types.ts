@@ -1,6 +1,7 @@
 export type QueryFilterOperator = "ct"
   | "sw"
   | "ew"
+  | "ne"
   | "eq"
   | "gt"
   | "gte"
