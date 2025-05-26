@@ -13,12 +13,17 @@ import { getSingularNameFromEndpoint } from "#utilities/entity.helpers";
 import type { EditTableHeaderProps } from "./EditTableHeader";
 import { useEditTableContext } from "./edit-table.provider";
 
-export interface EditTableToolBarProps extends EditTableHeaderProps {}
+export interface EditTableToolBarProps extends EditTableHeaderProps {
+  searchInputValue: string;
+  onSearchChange: (value: string) => void;
+}
 
 export function EditTableToolBar({
   endpoint,
+  searchInputValue,
   launchConfigModal,
   launchCreateDrawer,
+  onSearchChange,
 }: EditTableToolBarProps) {
   const [
     { state, table },
@@ -76,7 +81,13 @@ export function EditTableToolBar({
   return (
     <header className="edit-table-toolbar">
       <Flex h={48} align="center" justify="space-between" px={6}>
-        <TextInput placeholder="Search..." type="search" size="xs" />
+        <TextInput
+          placeholder="Search..."
+          type="search"
+          size="xs"
+          value={searchInputValue}
+          onChange={(event) => onSearchChange(event.target.value)}
+        />
 
         <Flex>
           <Box visibleFrom="sm">

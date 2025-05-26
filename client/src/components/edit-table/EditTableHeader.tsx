@@ -3,6 +3,8 @@ import { EditTableColumnHeaders } from "./EditTableColumnHeaders";
 import { EditTableToolBar } from "./EditTableToolBar";
 import { useEditTableContext } from "./edit-table.provider";
 import type { EditTableEndpoint } from "./edit-table.provider.types";
+import { useEditTableGlobalSearch } from "#hooks/edit-table/useEditTableGlobalSearch";
+import { useEffect } from "react";
 
 export interface EditTableHeaderProps {
   endpoint: EditTableEndpoint;
@@ -15,12 +17,21 @@ export function EditTableHeader({
   launchConfigModal,
   launchCreateDrawer,
 }: EditTableHeaderProps) {
-  const [{ table }] = useEditTableContext();
+  const [{ table, state }, { setGlobalSearch }] = useEditTableContext();
+  const globalSearchController = useEditTableGlobalSearch(state.globalSearch);
+  const [{ globalSearchText, inputText }, setSearchFieldText] =
+    globalSearchController;
+
+  useEffect(() => {
+    setGlobalSearch(globalSearchText);
+  }, [globalSearchText]);
 
   return (
     <Flex direction="column" component="header">
       <EditTableToolBar
         endpoint={endpoint}
+        searchInputValue={inputText}
+        onSearchChange={setSearchFieldText}
         launchConfigModal={launchConfigModal}
         launchCreateDrawer={launchCreateDrawer}
       />
