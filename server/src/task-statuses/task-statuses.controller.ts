@@ -29,7 +29,7 @@ export class TaskStatusesController extends BasicController<CreateTaskStatusDto,
 
   @Get()
   async findAll(@Req() req: Request) {
-    const [params, filters, search] = this.extractListParamsFromURL(req.url);
+    const [params, { columnFilters: filters, search }] = this.extractListParamsFromURL(req.url);
     const result = await this.taskStatusesService.findAll(params);
 
     if (filters && filters.length > 0) {

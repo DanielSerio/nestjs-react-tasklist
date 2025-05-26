@@ -26,3 +26,8 @@ export interface ParsedQueryFilter<Type = unknown> {
   value: Type;
   operator: QueryFilterOperator;
 }
+
+export type ListFilteringReturn<RecordType> = {
+  columnFilters: ParsedQueryFilter<RecordType>[],
+  search: string | null;
+};

@@ -29,7 +29,7 @@ export class TaskCategoriesController extends BasicController<CreateTaskCategory
 
   @Get()
   async findAll(@Req() req: Request) {
-    const [params, filters, search] = this.extractListParamsFromURL(req.url);
+    const [params, { columnFilters: filters, search }] = this.extractListParamsFromURL(req.url);
 
     const result = await this.taskCategoriesService.findAll(params);
 

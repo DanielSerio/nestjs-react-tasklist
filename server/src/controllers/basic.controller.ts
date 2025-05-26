@@ -1,4 +1,4 @@
-import { ParsedQueryFilter, RawQueryFilter } from "#types/query.types";
+import { ListFilteringReturn, ParsedQueryFilter, RawQueryFilter } from "#types/query.types";
 import { BadRequestException, InternalServerErrorException } from "@nestjs/common";
 import { FindManyOptions, FindOptionsOrder, FindOptionsWhere, In, LessThan, LessThanOrEqual, Like, MoreThan, MoreThanOrEqual, Not, Or } from "typeorm";
 import { z, ZodError, ZodSchema } from "zod";
@@ -258,7 +258,7 @@ export abstract class BasicController<CreateDto, UpdateDto, RecordType> {
    *  2. column filters - `ParsedQueryFilter<RecordType>[]`
    *  3. globalSearchText - `string | null`
    */
-  protected extractListParamsFromURL(url: string): [FindManyOptions<RecordType>, ParsedQueryFilter<RecordType>[], string | null] {
+  protected extractListParamsFromURL(url: string): [FindManyOptions<RecordType>, ListFilteringReturn<RecordType>] {
     const parsableUrl = new URL(`http://localhost:3000${url}`);
     const searchParams = parsableUrl.searchParams;
 
@@ -297,6 +297,12 @@ export abstract class BasicController<CreateDto, UpdateDto, RecordType> {
       };
     }
 
+    const filtering: ListFilteringReturn<RecordType> = {
+      columnFilters: parsedFiltersForReturn as ParsedQueryFilter<RecordType>[],
+      search: pSearchDecoded
+    };
+
+
     return [
       {
         take: this.getQueryInt(pLimit),
@@ -304,8 +310,7 @@ export abstract class BasicController<CreateDto, UpdateDto, RecordType> {
         order: this.processSorting(pSort) ?? undefined,
         ...filters
       },
-      parsedFiltersForReturn as ParsedQueryFilter<RecordType>[],
-      pSearchDecoded
+      filtering,
     ];
   }
 }
