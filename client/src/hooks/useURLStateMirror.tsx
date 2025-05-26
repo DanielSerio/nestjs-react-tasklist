@@ -26,6 +26,7 @@ export function useUrlStateMirror<State extends Record<string, any>>(
           if (state[key] === undefined || state[key] === null) {
             asParams.delete(key);
           } else {
+            //TODO: for sorting, this will be an object or array
             asParams.set(key, String(state[key]));
           }
         }
