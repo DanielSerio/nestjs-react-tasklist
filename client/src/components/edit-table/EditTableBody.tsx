@@ -22,7 +22,7 @@ export function EditTableBody({
   launchUpdateDrawer,
   launchDeleteDrawer,
 }: EditTableBodyProps) {
-  const [{ table, query }] = useEditTableContext();
+  const [{ table, query, state }] = useEditTableContext();
   const { gridTemplateColumns } = LayoutHelpers.getGridColumnProfile(
     table.getAllColumns().map((col) => col.columnDef)
   );
@@ -30,26 +30,25 @@ export function EditTableBody({
   if (query.isLoading && table.getRowModel().rows.length === 0) {
     return (
       <Box className="edit-table-body">
-        <EditTableSkeletonRow
-          endpoint={endpoint}
-          gridTemplateColumns={gridTemplateColumns}
-        />
-        <EditTableSkeletonRow
-          endpoint={endpoint}
-          gridTemplateColumns={gridTemplateColumns}
-        />
-        <EditTableSkeletonRow
-          endpoint={endpoint}
-          gridTemplateColumns={gridTemplateColumns}
-        />
-        <EditTableSkeletonRow
-          endpoint={endpoint}
-          gridTemplateColumns={gridTemplateColumns}
-        />
-        <EditTableSkeletonRow
-          endpoint={endpoint}
-          gridTemplateColumns={gridTemplateColumns}
-        />
+        {state.limit >= 5
+          ? [...new Array(5)].map((_, index) => {
+              return (
+                <EditTableSkeletonRow
+                  key={index}
+                  endpoint={endpoint}
+                  gridTemplateColumns={gridTemplateColumns}
+                />
+              );
+            })
+          : [...new Array(state.limit)].map((_, index) => {
+              return (
+                <EditTableSkeletonRow
+                  key={index}
+                  endpoint={endpoint}
+                  gridTemplateColumns={gridTemplateColumns}
+                />
+              );
+            })}
       </Box>
     );
   }

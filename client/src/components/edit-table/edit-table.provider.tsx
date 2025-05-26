@@ -41,6 +41,7 @@ import {
   removeFilterReducer,
   setFilterReducer,
 } from "./reducer/filtering";
+import { useUrlStateMirror } from "#hooks/useURLStateMirror";
 
 const EditTableContext = createContext<EditTableContextType>([
   {
@@ -95,9 +96,20 @@ const data = [] as any[];
 export const EditTableProvider = ({
   children,
   endpoint,
-}: PropsWithChildren<{ endpoint: EditTableEndpoint }>) => {
+  limit = 25,
+  offset = 0,
+}: PropsWithChildren<{
+  endpoint: EditTableEndpoint;
+  limit?: number;
+  offset?: number;
+}>) => {
   //TODO: initialState should be set from url params once url state mirroring is implemented
-  const [state, dispatch] = useReducer(reducer, { ...initialState, endpoint });
+  const [state, dispatch] = useReducer(reducer, {
+    ...initialState,
+    endpoint,
+    limit,
+    offset,
+  });
   const query = useEntityList({
     endpoint,
     paging: {
@@ -156,6 +168,26 @@ export const EditTableProvider = ({
     goToFirstPage: () => dispatch({ name: "go-to-first-page" }),
     goToLastPage: () => dispatch({ name: "go-to-last-page" }),
   };
+
+  useUrlStateMirror(
+    {
+      limit: query.data?.paging?.limit,
+      offset: query.data?.paging?.offset,
+      sort: query.data?.sort,
+      filter: query.data?.filter,
+      select: query.data?.select,
+      search: query.data?.search,
+    },
+    [
+      query.data?.paging?.limit,
+      query.data?.paging?.offset,
+      query.data?.sort,
+      query.data?.filter,
+      query.data?.select,
+      query.data?.search,
+    ]
+  );
+
   return (
     <EditTableContext.Provider
       value={[

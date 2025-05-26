@@ -247,7 +247,18 @@ export abstract class BasicController<CreateDto, UpdateDto, RecordType> {
     }, {} as FindOptionsWhere<RecordType>);
   }
 
-  protected extractListParamsFromURL(url: string): [FindManyOptions<RecordType>, ParsedQueryFilter<RecordType>[]] {
+  /**
+   * The function `extractListParamsFromURL` parses and extracts list parameters from a given URL in
+   * TypeScript.
+   * @param {string} url - The `extractListParamsFromURL` function takes a URL string as input and
+   * extracts various parameters from the URL to construct options for querying records. The parameters
+   * extracted from the URL include `limit`, `offset`, `sort`, `search`, and `filter`.
+   * @returns The `extractListParamsFromURL` function returns an array containing three elements:
+   *  1. where formatted for ORM - `FindManyOptions<RecordType>`
+   *  2. column filters - `ParsedQueryFilter<RecordType>[]`
+   *  3. globalSearchText - `string | null`
+   */
+  protected extractListParamsFromURL(url: string): [FindManyOptions<RecordType>, ParsedQueryFilter<RecordType>[], string | null] {
     const parsableUrl = new URL(`http://localhost:3000${url}`);
     const searchParams = parsableUrl.searchParams;
 
@@ -293,7 +304,8 @@ export abstract class BasicController<CreateDto, UpdateDto, RecordType> {
         order: this.processSorting(pSort) ?? undefined,
         ...filters
       },
-      parsedFiltersForReturn as ParsedQueryFilter<RecordType>[]
+      parsedFiltersForReturn as ParsedQueryFilter<RecordType>[],
+      pSearchDecoded
     ];
   }
 }

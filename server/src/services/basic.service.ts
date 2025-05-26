@@ -62,6 +62,7 @@ export abstract class BasicService
       select: params?.select ?? '*',
       filter: null as null | ParsedQueryFilter<TaskStatusRecord | TaskCategoryRecord>[], //<-- Set before controller returns
       sort: params?.order ?? null,
+      search: null as null | string, // <-- Set before controller returns
       totals: {
         records: count,
         pages

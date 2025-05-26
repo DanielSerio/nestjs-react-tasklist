@@ -12,7 +12,13 @@ import {
 import { EditTableDrawer } from "./drawer/EditTableDrawer";
 import type { EditTableEntity } from "#const/edit-table";
 
-export function EditTable({ endpoint }: { endpoint: EditTableEndpoint }) {
+export interface EditTableDefaults {
+  endpoint: EditTableEndpoint;
+  limit?: number;
+  offset?: number;
+}
+
+export function EditTable({ endpoint, limit, offset }: EditTableDefaults) {
   const configModalController = useDisclosure();
   const [isOpen, { close, open }] = configModalController;
   const drawerController = useEditTableDrawer({ endpoint });
@@ -36,7 +42,7 @@ export function EditTable({ endpoint }: { endpoint: EditTableEndpoint }) {
     });
 
   return (
-    <EditTableProvider endpoint={endpoint}>
+    <EditTableProvider endpoint={endpoint} limit={limit} offset={offset}>
       <EditTableConfigModal isOpen={isOpen} close={close} />
       <EditTableDrawer controller={drawerController} />
 
