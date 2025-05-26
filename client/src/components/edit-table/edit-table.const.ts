@@ -7,6 +7,7 @@ export const initialState: Omit<EditTableContextState, "endpoint"> = {
   select: "*",
   limit: 25,
   offset: 0,
+  totalRecords: 0
 };
 
 export const initialMethods = {
@@ -20,4 +21,9 @@ export const initialMethods = {
   setLimit() { },
   setOffset() { },
   setSelect() { },
+  setRecordCount() { },
+  goToNextPage() { },
+  goToPreviousPage() { },
+  goToFirstPage() { },
+  goToLastPage() { }
 };

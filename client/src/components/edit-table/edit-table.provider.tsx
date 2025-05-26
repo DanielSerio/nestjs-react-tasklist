@@ -1,6 +1,7 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useReducer,
   type PropsWithChildren,
 } from "react";
@@ -21,7 +22,15 @@ import type {
 import { initialMethods, initialState } from "./edit-table.const";
 import { globalSearchReducer } from "./reducer/global-search";
 import { selectReducer } from "./reducer/select";
-import { setLimitReducer, setOffsetReducer } from "./reducer/paging";
+import {
+  goToFirstPageReducer,
+  goToLastPageReducer,
+  goToNextPageReducer,
+  goToPreviousPageReducer,
+  setLimitReducer,
+  setOffsetReducer,
+  setRecordCountReducer,
+} from "./reducer/paging";
 import {
   addSortReducer,
   removeSortReducer,
@@ -67,6 +76,16 @@ function reducer(state: EditTableContextState, action: EditTableReducerAction) {
       return removeFilterReducer(state, action);
     case "set-filter":
       return setFilterReducer(state, action);
+    case "set-record-count":
+      return setRecordCountReducer(state, action);
+    case "go-to-next-page":
+      return goToNextPageReducer(state, action);
+    case "go-to-previous-page":
+      return goToPreviousPageReducer(state, action);
+    case "go-to-first-page":
+      return goToFirstPageReducer(state, action);
+    case "go-to-last-page":
+      return goToLastPageReducer(state, action);
     default:
       return state;
   }
@@ -100,6 +119,15 @@ export const EditTableProvider = ({
     getCoreRowModel: getCoreRowModel(),
   });
 
+  useEffect(() => {
+    if (query.data?.totals?.records) {
+      dispatch({
+        name: "set-record-count",
+        payload: query.data.totals.records,
+      });
+    }
+  }, [query.data?.totals?.records]);
+
   const methods: EditTableContextMethods = {
     setGlobalSearch: (search: string) =>
       dispatch({ name: "set-search", payload: search }),
@@ -121,6 +149,12 @@ export const EditTableProvider = ({
       dispatch({ name: "remove-filter", payload: column }),
     setFilter: (filter: unknown) =>
       dispatch({ name: "set-filter", payload: filter }),
+    setRecordCount: (count: number) =>
+      dispatch({ name: "set-record-count", payload: count }),
+    goToNextPage: () => dispatch({ name: "go-to-next-page" }),
+    goToPreviousPage: () => dispatch({ name: "go-to-previous-page" }),
+    goToFirstPage: () => dispatch({ name: "go-to-first-page" }),
+    goToLastPage: () => dispatch({ name: "go-to-last-page" }),
   };
   return (
     <EditTableContext.Provider
