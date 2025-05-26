@@ -1,19 +1,24 @@
+import type { FilterOperator } from "#components/edit-table/reducer/filtering";
 import { BASE_URL } from "#const/api";
 import type { EditTableEntity } from "#const/edit-table";
 import { QUERY_KEYS } from "#const/query-client";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import type { ColumnFiltersState, SortingState } from "@tanstack/react-table";
+import type { ColumnFilter, SortingState } from "@tanstack/react-table";
 
 export interface ListPagingOptions {
   limit: number;
   offset: number;
 }
 
+type OverrideColumnFilter = ColumnFilter & {
+  operator: FilterOperator;
+};
+
 export interface UseEntityListOptions {
   endpoint: "statuses" | "categories";
   paging: ListPagingOptions;
   sort?: SortingState | null;
-  filter?: ColumnFiltersState | null;
+  filter?: OverrideColumnFilter[] | null;
   globalSearch?: string | null;
   select?: string | null;
 }
@@ -22,7 +27,7 @@ export interface EntityListResponse<Type extends EditTableEntity> {
   records: Type[];
   limit: number;
   offset: number;
-  filter: ColumnFiltersState | null;
+  filter: OverrideColumnFilter[] | null;
   sort: SortingState | null;
   select: string;
   search?: string | null;
@@ -81,7 +86,9 @@ function getSortingChunk(sort?: SortingState | null) {
   return `sort=${encodeURIComponent(JSON.stringify(sortStrings))}`;
 }
 
-function getFilteringChunk(filter?: ColumnFiltersState | null) {
+function getFilteringChunk(
+  filter?: (ColumnFilter & { operator: FilterOperator })[] | null
+) {
   const nullValue = `filter=null`;
 
   if (!filter) {
@@ -89,7 +96,7 @@ function getFilteringChunk(filter?: ColumnFiltersState | null) {
   }
 
   const filterStrings = filter.map((s) => {
-    return `${s.id}_${s.value}`;
+    return `${s.id}_${s.operator}_${s.value}`;
   });
 
   if (filterStrings.length === 0) {

@@ -41,7 +41,6 @@ import {
   removeFilterReducer,
   setFilterReducer,
 } from "./reducer/filtering";
-import { useEditTableGlobalSearch } from "#hooks/edit-table/useEditTableGlobalSearch";
 
 const EditTableContext = createContext<EditTableContextType>([
   {

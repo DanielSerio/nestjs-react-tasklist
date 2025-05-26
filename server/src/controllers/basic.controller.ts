@@ -87,26 +87,42 @@ export abstract class BasicController<CreateDto, UpdateDto, RecordType> {
       return null;
     }
 
-    return JSON.parse(decoded) as RawQueryFilter[] | null;
+    // format of decoded will be a string in `column_operator_value` format
+    const filterRegex = /(\w+)[_](ct|sw|ew|eq|ne|gt|gte|lt|lte|in|nin)[_](.+?)((?=[,|&])?)/g;
+    const matches = decoded.match(filterRegex);
+
+    if (!matches) {
+      return null;
+    }
+
+    return [...matches].map((matchStr: string) => {
+      const [id, operator, value] = matchStr.split(/[_]/g);
+
+      return {
+        id,
+        operator,
+        value
+      } as RawQueryFilter;
+    });
   }
 
   private parseColumnFilter<FilterValue>(filter: RawQueryFilter): null | ParsedQueryFilter<FilterValue> {
     const validator = z.object({
-      column: z.string(),
+      id: z.string(),
       operator: z.enum(['ct', 'sw', 'ew', 'eq', 'ne', 'gt', 'gte', 'lt', 'lte', 'in', 'nin']),
-      value: z.union([z.string(), z.number(), z.boolean(), z.object({}), z.array(z.string()), z.array(z.number()), z.array(z.object({}),)])
+      value: z.any()
     });
 
     const parsed = validator.safeParse(filter);
 
     if (!parsed.success) {
-      console.warn('Invalid filter format:', parsed.error);
+      console.warn('Invalid filter format:', filter, parsed.error);
 
       return null;
     }
 
     return {
-      id: parsed.data.column,
+      id: parsed.data.id,
       operator: parsed.data.operator,
       value: parsed.data.value as FilterValue
     };
@@ -208,7 +224,13 @@ export abstract class BasicController<CreateDto, UpdateDto, RecordType> {
    * @returns `FindOptionsWhere<RecordType>`
    */
   public parseColumnFilters(queryText: string) {
+    if (queryText == null || queryText === 'null') {
+      return null; // No filters provided
+    }
+
     const rawFilters = this.extractColumnFilters(queryText);
+
+    console.debug('Extracted raw filters:', rawFilters);
 
     if (!rawFilters) {
       return null;
@@ -233,7 +255,7 @@ export abstract class BasicController<CreateDto, UpdateDto, RecordType> {
     const pOffset = searchParams.get('offset');
     const pSort = searchParams.get('sort');
     const pSearch = searchParams.get('search');
-    const pSearchDecoded = pSearch ? decodeURIComponent(pSearch) : null;
+    const pSearchDecoded = (pSearch && pSearch !== 'null') ? decodeURIComponent(pSearch) : null;
 
     const pFilter = searchParams.get('filter');
     const parsedFilters = pFilter ? this.parseColumnFilters(pFilter) : null;

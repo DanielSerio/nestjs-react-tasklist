@@ -4,20 +4,27 @@ import type {
   ETAction,
 } from "../edit-table.provider.types";
 
+export type FilterOperator =
+  | "ct"
+  | "sw"
+  | "ew"
+  | "eq"
+  | "neq"
+  | "gt"
+  | "gte"
+  | "lt"
+  | "lte"
+  | "in"
+  | "nin";
+
 interface FilterValue {
   id: string;
   value: unknown;
-  operator:
-    | "ct"
-    | "sw"
-    | "ew"
-    | "eq"
-    | "gt"
-    | "gte"
-    | "lt"
-    | "lte"
-    | "in"
-    | "nin";
+  operator: FilterOperator;
+}
+
+export interface EditTableFilterValue<T> extends FilterValue {
+  value: T;
 }
 
 export interface ETAddFilterAction extends ETAction {
@@ -31,7 +38,7 @@ export interface ETRemoveFilterAction extends ETAction {
 }
 export interface ETSetFilterAction extends ETAction {
   name: "set-filter";
-  payload: ColumnFiltersState | null;
+  payload: FilterValue[] | null;
 }
 
 export function addFilterReducer(

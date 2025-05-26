@@ -1,18 +1,22 @@
 import type { EditTableEntity } from "#const/edit-table";
-import type { ColumnFiltersState, SortingState, useReactTable } from "@tanstack/react-table";
+import type { ColumnFilter, SortingState, useReactTable } from "@tanstack/react-table";
 import type { ETGlobalSearchAction } from "./reducer/global-search";
 import type { ETSelectAction } from "./reducer/select";
 import type { ETPagingCountAction, ETPagingLimitAction, ETPagingOffsetAction, ETPagingPageChangeAction } from "./reducer/paging";
 import type { ETAddSortAction, ETRemoveSortAction, ETSetSortAction } from "./reducer/sorting";
-import type { ETAddFilterAction, ETRemoveFilterAction, ETSetFilterAction } from "./reducer/filtering";
+import type { ETAddFilterAction, ETRemoveFilterAction, ETSetFilterAction, FilterOperator } from "./reducer/filtering";
 import type { useEntityList } from "#hooks/useEntityList";
 
 export type EditTableEndpoint = "statuses" | "categories";
 
+type OverrideColumnFilter = (ColumnFilter & {
+  operator: FilterOperator;
+});
+
 export interface EditTableContextState {
   endpoint: EditTableEndpoint;
   sort: SortingState;
-  filter: ColumnFiltersState;
+  filter: OverrideColumnFilter[];
   globalSearch: string;
   select: string;
   limit: number;
@@ -34,9 +38,9 @@ export interface EditTableContextMethods {
   removeSorting: (column: string) => void;
   setSorting: (sort: SortingState | null) => void;
   // Filter methods
-  addFilter: (column: string, value: string) => void;
+  addFilter: (column: string, operator: FilterOperator, value: string) => void;
   removeFilter: (column: string) => void;
-  setFilter: (filter: ColumnFiltersState | null) => void;
+  setFilter: (filter: OverrideColumnFilter[] | null) => void;
   // Pagination methods
   setLimit: (limit: number) => void;
   setOffset: (offset: number) => void;

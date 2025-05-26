@@ -1,5 +1,8 @@
 import { Fieldset, Modal, Select } from "@mantine/core";
 import { useEditTableContext } from "../edit-table.provider";
+import { EditTableFilter } from "../EditTableFilter";
+import { useState } from "react";
+import type { FilterOperator } from "../reducer/filtering";
 
 export function EditTableConfigModal({
   isOpen,
@@ -8,8 +11,12 @@ export function EditTableConfigModal({
   isOpen: boolean;
   close: () => void;
 }) {
-  const [{ state }, { setLimit }] = useEditTableContext();
-
+  const [{ state }, { setLimit, setFilter }] = useEditTableContext();
+  const [newFilter, setNewFilter] = useState({
+    id: "id",
+    value: "",
+    operator: "eq" as FilterOperator,
+  });
   return (
     <Modal title="Configure" opened={isOpen} onClose={close}>
       <Modal.Body>
@@ -21,7 +28,23 @@ export function EditTableConfigModal({
             onChange={(value) => setLimit(Number(value))}
           />
         </Fieldset>
-        <Fieldset legend="Filters" disabled></Fieldset>
+        <Fieldset legend="Filters">
+          <EditTableFilter
+            columns={["id", "createdAt", "updatedAt", "name"]}
+            filter={newFilter}
+            onChange={(filter) => setNewFilter(filter)}
+            onAdd={() => {
+              const clone = Object.freeze({ ...newFilter });
+
+              setFilter([...state.filter, clone]);
+              setNewFilter({
+                id: "id",
+                value: "",
+                operator: "eq" as FilterOperator,
+              });
+            }}
+          />
+        </Fieldset>
       </Modal.Body>
     </Modal>
   );
