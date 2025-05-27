@@ -9,11 +9,16 @@ export const Route = createFileRoute("/categories")({
 });
 
 function RouteComponent() {
-  const { limit, offset } = useListDefaults("/categories");
+  const { limit, offset, sort } = useListDefaults("/categories");
 
   return (
     <AppShellMain>
-      <EditTable endpoint="categories" limit={limit} offset={offset} />
+      <EditTable
+        endpoint="categories"
+        limit={limit}
+        offset={offset}
+        sort={sort}
+      />
     </AppShellMain>
   );
 }

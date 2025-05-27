@@ -17,7 +17,8 @@ export function EditTableHeader({
   launchConfigModal,
   launchCreateDrawer,
 }: EditTableHeaderProps) {
-  const [{ table, state }, { setGlobalSearch }] = useEditTableContext();
+  const [{ table, state }, { setGlobalSearch, addSorting, removeSorting }] =
+    useEditTableContext();
   const globalSearchController = useEditTableGlobalSearch(state.globalSearch);
   const [{ globalSearchText, inputText }, setSearchFieldText] =
     globalSearchController;
@@ -35,7 +36,12 @@ export function EditTableHeader({
         launchConfigModal={launchConfigModal}
         launchCreateDrawer={launchCreateDrawer}
       />
-      <EditTableColumnHeaders table={table} />
+      <EditTableColumnHeaders
+        table={table}
+        state={state}
+        addSorting={addSorting}
+        removeSorting={removeSorting}
+      />
     </Flex>
   );
 }

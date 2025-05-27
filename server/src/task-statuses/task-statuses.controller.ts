@@ -29,7 +29,7 @@ export class TaskStatusesController extends BasicController<CreateTaskStatusDto,
 
   @Get()
   async findAll(@Req() req: Request) {
-    const [params, { columnFilters: filters, search }] = this.extractListParamsFromURL(req.url);
+    const [params, { columnFilters: filters, search }, sorting] = this.extractListParamsFromURL(req.url);
     const result = await this.taskStatusesService.findAll(params);
 
     if (filters && filters.length > 0) {
@@ -39,6 +39,12 @@ export class TaskStatusesController extends BasicController<CreateTaskStatusDto,
     if (search && search.length > 0) {
       result.search = search;
     }
+
+    if (sorting && sorting.length > 0) {
+      result.sort = sorting;
+    }
+
+    console.info('FindAll Results', result);
 
     return result;
   }

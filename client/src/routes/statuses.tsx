@@ -9,11 +9,16 @@ export const Route = createFileRoute("/statuses")({
 });
 
 function RouteComponent() {
-  const { limit, offset } = useListDefaults("/statuses");
+  const { limit, offset, sort } = useListDefaults("/statuses");
 
   return (
     <AppShellMain>
-      <EditTable endpoint="statuses" limit={limit} offset={offset} />
+      <EditTable
+        endpoint="statuses"
+        limit={limit}
+        offset={offset}
+        sort={sort}
+      />
     </AppShellMain>
   );
 }

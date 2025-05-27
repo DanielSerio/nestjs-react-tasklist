@@ -31,3 +31,5 @@ export type ListFilteringReturn<RecordType> = {
   columnFilters: ParsedQueryFilter<RecordType>[],
   search: string | null;
 };
+
+export type ListSortingReturn<RecordType> = { id: keyof RecordType; desc: boolean; }[];

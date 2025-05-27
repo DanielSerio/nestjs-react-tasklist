@@ -1,61 +1,60 @@
 import { ActionIcon, Box, Flex } from "@mantine/core";
 import { TbMinus, TbSortAscending, TbSortDescending } from "react-icons/tb";
-import { useEditTableContext } from "./edit-table.provider";
-import { useCallback } from "react";
 
 export interface EditTableSortControlProps {
   label: string;
   column: string;
+  sort: { id: string; desc: boolean }[];
+  addSorting: (column: string, desc: boolean) => void;
+  removeSorting: (column: string) => void;
 }
 
 export function EditTableSortControl({
   label,
   column,
+  sort,
+  addSorting,
+  removeSorting,
 }: EditTableSortControlProps) {
-  const [
-    {
-      state: { sort },
-    },
-    { addSorting, removeSorting },
-  ] = useEditTableContext();
+  if (!sort) {
+    return <></>;
+  }
 
-  const getCurrentSorting = () => {
-    const sortIndex = sort.findIndex((s) => s.id === column);
-    const isDescending = sort[sortIndex]?.desc;
+  const handleSortClick = () => {
+    if (sort.length === 0 || !sort.some((s) => s.id === column)) {
+      // No item yet. add it.
+      addSorting(column, false);
 
-    if (sortIndex === -1) {
-      return null;
-    } else if (isDescending) {
-      return "desc";
+      return;
     }
-    return "asc";
+
+    const currentItem = sort.find((s) => s.id === column) ?? null;
+
+    if (currentItem) {
+      const nextValue =
+        currentItem.desc === true
+          ? null
+          : currentItem.desc === false
+            ? true
+            : false;
+
+      if (nextValue === null) {
+        removeSorting(column);
+      } else {
+        addSorting(column, nextValue);
+      }
+
+      return;
+    } else {
+      addSorting(column, false);
+
+      return;
+    }
   };
 
-  const handleSortClick = useCallback(() => {
-    if (sort.length === 0 || !sort.some((s) => s.id === column)) {
-      addSorting(column, false);
-    } else {
-      const current = getCurrentSorting();
-
-      if (current === null) {
-        addSorting(column, false);
-
-        return;
-      }
-
-      const isDescending = current === "desc";
-
-      removeSorting(column);
-
-      if (!isDescending) {
-        addSorting(column, !isDescending);
-      }
-    }
-  }, [sort]);
-
   const getSortIcon = () => {
-    const current = getCurrentSorting();
-    const isDescending = current === "desc";
+    const current = sort.find((s) => s.id === column)?.desc ?? null;
+    const isDescending = current === true;
 
     if (current === null) {
       return <TbMinus />;
@@ -66,13 +65,18 @@ export function EditTableSortControl({
     return <TbSortAscending />;
   };
 
+  const getColor = () =>
+    ((sort ?? []).find((s) => s.id === column)?.desc ?? null) === null
+      ? "gray"
+      : "teal";
+
   return (
     <Flex align="center" gap="xs">
       <Box>{label}</Box>
       <ActionIcon
         className="sort-btn"
         variant="light"
-        color={getCurrentSorting() === null ? "gray" : "teal"}
+        color={getColor()}
         p={0}
         onClick={handleSortClick}
       >

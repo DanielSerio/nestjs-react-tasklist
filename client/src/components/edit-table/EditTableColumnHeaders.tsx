@@ -6,9 +6,17 @@ import { EditTableSortControl } from "./EditTableSortControl";
 
 export interface EditTableColumnHeadersProps {
   table: ReturnType<typeof useEditTableContext>[0]["table"];
+  state: ReturnType<typeof useEditTableContext>[0]["state"];
+  addSorting: (column: string, desc: boolean) => void;
+  removeSorting: (column: string) => void;
 }
 
-export function EditTableColumnHeaders({ table }: EditTableColumnHeadersProps) {
+export function EditTableColumnHeaders({
+  table,
+  state,
+  addSorting,
+  removeSorting,
+}: EditTableColumnHeadersProps) {
   const { gridTemplateColumns } = LayoutHelpers.getGridColumnProfile(
     table.getAllColumns().map((col) => col.columnDef)
   );
@@ -29,7 +37,13 @@ export function EditTableColumnHeaders({ table }: EditTableColumnHeadersProps) {
         return (
           <EditTableCell key={header.id} label={text as string}>
             {header.isPlaceholder ? null : (
-              <EditTableSortControl label={text as string} column={header.id} />
+              <EditTableSortControl
+                label={text as string}
+                column={header.id}
+                sort={state.sort}
+                addSorting={addSorting}
+                removeSorting={removeSorting}
+              />
             )}
           </EditTableCell>
         );

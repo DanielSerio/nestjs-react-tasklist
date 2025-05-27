@@ -28,12 +28,42 @@ export function addSortReducer(
   state: EditTableContextState,
   action: ETAddSortAction
 ) {
-  const newSort = [...state.sort, action.payload];
+  if (!state.sort.some((srt) => srt.id === action.payload.id)) {
+    const newSort = [...state.sort, action.payload];
 
-  return {
-    ...state,
-    sort: newSort,
-  };
+    return {
+      ...state,
+      sort: newSort,
+    };
+  } else {
+    const foundItemIndex = state.sort.findIndex(
+      (srt) => srt.id === action.payload.id
+    );
+
+    if (foundItemIndex > -1) {
+      const copy = state.sort.slice();
+      const existing = copy[foundItemIndex];
+
+      if (existing.desc === false) {
+        copy.splice(foundItemIndex, 1);
+
+        state.sort = copy;
+
+        return state;
+      }
+
+      copy.splice(foundItemIndex, 1, {
+        ...existing,
+        desc: !existing.desc,
+      });
+
+      state.sort = copy;
+
+      return state;
+    }
+  }
+
+  return state;
 }
 
 export function removeSortReducer(

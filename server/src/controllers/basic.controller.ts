@@ -1,4 +1,4 @@
-import { ListFilteringReturn, ParsedQueryFilter, RawQueryFilter } from "#types/query.types";
+import { ListFilteringReturn, ListSortingReturn, ParsedQueryFilter, RawQueryFilter } from "#types/query.types";
 import { BadRequestException, InternalServerErrorException } from "@nestjs/common";
 import { FindManyOptions, FindOptionsOrder, FindOptionsWhere, In, LessThan, LessThanOrEqual, Like, MoreThan, MoreThanOrEqual, Not, Or } from "typeorm";
 import { z, ZodError, ZodSchema } from "zod";
@@ -72,12 +72,25 @@ export abstract class BasicController<CreateDto, UpdateDto, RecordType> {
       return null;
     }
 
-    return JSON.parse(decoded).reduce(({ }, strVal) => {
+
+
+    const objectMap = JSON.parse(decoded).reduce(({ }, strVal) => {
       const [field, dir] = strVal.split(/[_]/g);
       return {
         [field]: (dir === 'asc' ? 'asc' : 'desc') as 'ASC' | "DESC"
       };
     }, {} satisfies FindOptionsOrder<RecordType>);
+
+
+    return [
+      objectMap,
+      Object.entries(objectMap ?? {}).map(([column, dir]) => {
+        return {
+          id: column,
+          desc: `${dir}`.toLowerCase() === 'desc'
+        };
+      })
+    ] as const;
   }
 
   private extractColumnFilters(queryText: string): RawQueryFilter[] | null {
@@ -258,7 +271,7 @@ export abstract class BasicController<CreateDto, UpdateDto, RecordType> {
    *  2. column filters - `ParsedQueryFilter<RecordType>[]`
    *  3. globalSearchText - `string | null`
    */
-  protected extractListParamsFromURL(url: string): [FindManyOptions<RecordType>, ListFilteringReturn<RecordType>] {
+  protected extractListParamsFromURL(url: string): [FindManyOptions<RecordType>, ListFilteringReturn<RecordType>, ListSortingReturn<RecordType> | null] {
     const parsableUrl = new URL(`http://localhost:3000${url}`);
     const searchParams = parsableUrl.searchParams;
 
@@ -302,15 +315,17 @@ export abstract class BasicController<CreateDto, UpdateDto, RecordType> {
       search: pSearchDecoded
     };
 
+    const [map, entries] = this.processSorting(pSort) ?? [];
 
     return [
       {
         take: this.getQueryInt(pLimit),
         skip: this.getQueryInt(pOffset),
-        order: this.processSorting(pSort) ?? undefined,
+        order: map ?? undefined,
         ...filters
       },
       filtering,
+      entries as ListSortingReturn<RecordType> ?? null
     ];
   }
 }

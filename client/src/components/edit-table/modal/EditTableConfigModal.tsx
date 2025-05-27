@@ -17,6 +17,11 @@ export function EditTableConfigModal({
     value: "",
     operator: "eq" as FilterOperator,
   });
+
+  if (!state || !state.limit) {
+    return null;
+  }
+
   return (
     <Modal
       title="Configure"
