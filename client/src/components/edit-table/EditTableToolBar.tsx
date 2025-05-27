@@ -18,6 +18,7 @@ export interface EditTableToolBarProps extends EditTableHeaderProps {
   onSearchChange: (value: string) => void;
 }
 
+//TODO: Add an indicator to the filter button that indicates the number of active filters
 export function EditTableToolBar({
   endpoint,
   searchInputValue,
