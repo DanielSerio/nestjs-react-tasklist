@@ -2,6 +2,7 @@ import { type ColumnDef } from "@tanstack/react-table";
 
 import type { TaskCategory, TaskStatus } from "#types/task.types";
 import type { Pretty } from "#types/utility.types";
+import { formatDateForHumans } from "#utilities/format.helpers";
 
 export type EditTableEntity = Pretty<TaskStatus & TaskCategory>;
 
@@ -37,7 +38,7 @@ const defaultColumns: ColumnDefWithMeta[] = [
     header: "Created At",
     accessorKey: "createdAt",
     id: "createdAt",
-    accessorFn: (row) => row.createdAt.toLocaleString(),
+    accessorFn: (row) => formatDateForHumans(row.createdAt),
     size: 120,
   },
   {
@@ -45,7 +46,7 @@ const defaultColumns: ColumnDefWithMeta[] = [
     accessorKey: "updatedAt",
     id: "updatedAt",
     accessorFn: (row) =>
-      row.updatedAt ? row.updatedAt.toLocaleString() : null,
+      row.updatedAt ? formatDateForHumans(row.updatedAt) : null,
     size: 120,
   },
   {
