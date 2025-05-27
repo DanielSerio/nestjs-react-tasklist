@@ -61,10 +61,10 @@ export function EditTableToolBar({
           <TbChevronLeft />
         </ActionIcon>
         <Box>
-          {currentPage} / {totalPages}
+          {currentPage} / {totalPages || 1}
         </Box>
         <ActionIcon
-          disabled={currentPage === totalPages}
+          disabled={currentPage >= totalPages}
           size="md"
           variant="light"
           color="gray"
@@ -73,7 +73,7 @@ export function EditTableToolBar({
           <TbChevronRight />
         </ActionIcon>
         <ActionIcon
-          disabled={currentPage === totalPages}
+          disabled={currentPage >= totalPages}
           size="md"
           variant="light"
           color="gray"
