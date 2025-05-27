@@ -1,4 +1,11 @@
-import { ActionIcon, Box, Flex, Popover, TextInput } from "@mantine/core";
+import {
+  ActionIcon,
+  Box,
+  Flex,
+  Indicator,
+  Popover,
+  TextInput,
+} from "@mantine/core";
 import {
   TbBook2,
   TbChevronLeft,
@@ -18,7 +25,6 @@ export interface EditTableToolBarProps extends EditTableHeaderProps {
   onSearchChange: (value: string) => void;
 }
 
-//TODO: Add an indicator to the filter button that indicates the number of active filters
 export function EditTableToolBar({
   endpoint,
   searchInputValue,
@@ -79,6 +85,18 @@ export function EditTableToolBar({
     );
   };
 
+  const FilterButton = () => {
+    return (
+      <ActionIcon
+        title={`Configure ${getSingularNameFromEndpoint(endpoint)} List`}
+        variant="light"
+        onClick={launchConfigModal}
+      >
+        <TbFilterCog />
+      </ActionIcon>
+    );
+  };
+
   return (
     <header className="edit-table-toolbar">
       <Flex h={48} align="center" justify="space-between" px={6}>
@@ -108,13 +126,18 @@ export function EditTableToolBar({
           </Box>
 
           <ToolBar>
-            <ActionIcon
-              title={`Configure ${getSingularNameFromEndpoint(endpoint)} List`}
-              variant="light"
-              onClick={launchConfigModal}
-            >
-              <TbFilterCog />
-            </ActionIcon>
+            {state.filter.length > 0 ? (
+              <Indicator
+                inline
+                label={!!state.filter ? state.filter.length : null}
+                size={16}
+              >
+                <FilterButton />
+              </Indicator>
+            ) : (
+              <FilterButton />
+            )}
+
             <ActionIcon
               title={`Add ${getSingularNameFromEndpoint(endpoint)}`}
               variant="light"
