@@ -25,6 +25,7 @@ export function EditTableHeader({
 
   useEffect(() => {
     setGlobalSearch(globalSearchText);
+    setSearchFieldText(globalSearchText);
   }, [globalSearchText]);
 
   return (

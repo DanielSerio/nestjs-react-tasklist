@@ -1,5 +1,5 @@
 import { AppShellMain } from "@mantine/core";
-import { createFileRoute, useSearch } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { EditTable } from "#components/edit-table/EditTable";
 import "../styles/export/categories.scss";
 import { useListDefaults } from "#hooks/useListDefaults";
@@ -9,7 +9,7 @@ export const Route = createFileRoute("/categories")({
 });
 
 function RouteComponent() {
-  const { limit, offset, sort } = useListDefaults("/categories");
+  const { limit, offset, sort, search } = useListDefaults("/categories");
 
   return (
     <AppShellMain>
@@ -18,6 +18,7 @@ function RouteComponent() {
         limit={limit}
         offset={offset}
         sort={sort}
+        search={search}
       />
     </AppShellMain>
   );

@@ -100,6 +100,7 @@ export const EditTableProvider = ({
   offset = 0,
   sort = [],
   filter = [],
+  search = "",
 }: PropsWithChildren<EditTableDefaults>) => {
   const [state, dispatch] = useReducer(reducer, {
     ...initialState,
@@ -108,6 +109,7 @@ export const EditTableProvider = ({
     offset,
     sort,
     filter,
+    globalSearch: search ?? "",
   });
   const query = useEntityList({
     endpoint,

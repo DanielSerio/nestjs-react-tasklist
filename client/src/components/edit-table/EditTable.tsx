@@ -20,6 +20,7 @@ export interface EditTableDefaults {
   offset?: number;
   sort?: ColumnSort[];
   filter?: ColumnFilter<unknown>[];
+  search?: string | null;
 }
 
 export function EditTable({ endpoint, ...props }: EditTableDefaults) {

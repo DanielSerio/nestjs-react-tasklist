@@ -8,6 +8,12 @@ export function useListDefaults(from: Parameters<typeof useSearch>[0]["from"]) {
   const limit = params.limit;
   const offset = params.offset;
   const sorting = params.sort;
+  const search = params.search;
+
+  const defaults: Record<string, any> = {
+    limit,
+    offset,
+  };
 
   if (sorting) {
     const sort = sorting.split(/[,]/g).map((colString: string) => {
@@ -18,15 +24,12 @@ export function useListDefaults(from: Parameters<typeof useSearch>[0]["from"]) {
       };
     });
 
-    return {
-      limit,
-      offset,
-      sort,
-    };
+    defaults.sort = sort;
   }
 
-  return {
-    limit,
-    offset,
-  };
+  if (search) {
+    defaults.search = search;
+  }
+
+  return defaults;
 }
