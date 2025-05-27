@@ -103,7 +103,7 @@ function getFilteringChunk(
     return nullValue;
   }
 
-  return `filter=${encodeURIComponent(JSON.stringify(filterStrings))}`;
+  return `filter=${filterStrings.join(",")}`;
 }
 
 function getGlobalSearchChunk(search?: string | null) {
@@ -121,11 +121,11 @@ export function useEntityList(options: UseEntityListOptions) {
   function constructApiUrl(opts: Omit<UseEntityListOptions, "endpoint">) {
     const baseUrl = `${BASE_URL}/task-${options.endpoint}`;
     const urlSegments = [
+      `select=${opts.select ?? "*"}`,
       getPagingChunk(opts.paging),
       getSortingChunk(opts.sort),
       getFilteringChunk(opts.filter),
       getGlobalSearchChunk(opts.globalSearch),
-      `select=${opts.select ?? "*"}`,
     ];
 
     return `${baseUrl}?${urlSegments.join("&")}`;

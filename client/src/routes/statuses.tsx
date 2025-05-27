@@ -9,7 +9,7 @@ export const Route = createFileRoute("/statuses")({
 });
 
 function RouteComponent() {
-  const { limit, offset, sort, search } = useListDefaults("/statuses");
+  const { limit, offset, sort, search, filter } = useListDefaults("/statuses");
 
   return (
     <AppShellMain>
@@ -19,6 +19,7 @@ function RouteComponent() {
         offset={offset}
         sort={sort}
         search={search}
+        filter={filter}
       />
     </AppShellMain>
   );

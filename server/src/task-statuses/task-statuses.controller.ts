@@ -44,8 +44,6 @@ export class TaskStatusesController extends BasicController<CreateTaskStatusDto,
       result.sort = sorting;
     }
 
-    console.info('FindAll Results', result);
-
     return result;
   }
 

@@ -9,6 +9,7 @@ export function useListDefaults(from: Parameters<typeof useSearch>[0]["from"]) {
   const offset = params.offset;
   const sorting = params.sort;
   const search = params.search;
+  const filter = params.filter;
 
   const defaults: Record<string, any> = {
     limit,
@@ -29,6 +30,29 @@ export function useListDefaults(from: Parameters<typeof useSearch>[0]["from"]) {
 
   if (search) {
     defaults.search = search;
+  }
+
+  if (filter) {
+    const filters = (filter as string).split(/[,]/g).map((fltr) => {
+      const [column, operator, valueText] = fltr.split(/[_]/g);
+      let value: string | number | Date = valueText;
+
+      if (column === "id") {
+        value = Number(valueText);
+      }
+
+      if (column.endsWith("edAt") && typeof value === "string") {
+        value = new Date(Date.parse(value));
+      }
+
+      return {
+        id: column,
+        operator,
+        value,
+      };
+    });
+
+    defaults.filter = filters;
   }
 
   return defaults;
