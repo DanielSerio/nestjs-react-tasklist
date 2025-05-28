@@ -1,4 +1,4 @@
-import { Pretty } from "./utility.types";
+import type { Pretty } from "./utility.types";
 
 export interface TaskStatusCreate {
   name: string;
