@@ -9,7 +9,8 @@ export const Route = createFileRoute("/categories")({
 });
 
 function RouteComponent() {
-  const { limit, offset, sort, search } = useListDefaults("/categories");
+  const { limit, offset, sort, search, filter } =
+    useListDefaults("/categories");
 
   return (
     <AppShellMain>
@@ -19,6 +20,7 @@ function RouteComponent() {
         offset={offset}
         sort={sort}
         search={search}
+        filter={filter}
       />
     </AppShellMain>
   );
