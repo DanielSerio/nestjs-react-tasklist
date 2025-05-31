@@ -10,8 +10,7 @@ export class Task implements TaskRecord {
 
   @Column({
     type: 'varchar',
-    length: 255,
-    unique: true
+    length: 255
   })
   name: string;
 
@@ -23,9 +22,9 @@ export class Task implements TaskRecord {
 
   @Column({
     type: 'int',
-    nullable: true
+    default: 1
   })
-  statusId: number | null = null;
+  statusId: number;
 
   @Column({
     type: 'int',

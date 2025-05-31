@@ -18,6 +18,6 @@ export class TaskValidator {
     name: this._local.name,
     categoryId: this._local.categoryId,
     priority: this._local.priority,
-    statusId: z.coerce.number().int().positive().nullable(),
-  } satisfies Record<keyof TaskUpdate, any>);
+    statusId: z.coerce.number().int().positive(),
+  } satisfies Record<keyof TaskUpdate, any>).partial();
 }
