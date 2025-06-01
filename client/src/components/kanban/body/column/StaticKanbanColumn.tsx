@@ -1,5 +1,5 @@
 import type { Task } from "#types/task.types";
-import { Box, Flex, ScrollArea, Text } from "@mantine/core";
+import { Badge, Box, Flex, ScrollArea, Text } from "@mantine/core";
 import type { DetailsHTMLAttributes } from "react";
 import { TbChevronDown, TbChevronUp } from "react-icons/tb";
 
@@ -24,11 +24,15 @@ export function StaticKanbanColumn({
   return (
     <Box component="details" className={classNames} {...props}>
       <Flex component="summary" justify="space-between" align="center" p="xs">
-        <Text size="xl" fw="lighter">
+        <Badge
+          fw="lighter"
+          color="dark"
+          className={`badge-status-${status.name.toLowerCase().replace(" ", "-")}`}
+        >
           {status.name}
-        </Text>
+        </Badge>
 
-        <Box className="arrow" lh={0}>
+        <Box className="arrow" lh={0} mr={6}>
           <TbChevronDown />
         </Box>
       </Flex>
