@@ -45,4 +45,4 @@ interface TaskBody extends TaskUpdateBody {
   deletedAt: Date | null;
 }
 
-export type Task = Pretty<TaskBody>;
+export type Task = Pretty<TaskBody> & { id: number; };

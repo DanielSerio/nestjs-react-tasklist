@@ -1,0 +1,20 @@
+.kanban {
+  summary {
+    cursor: pointer;
+    border-bottom: 1px solid var(--mantine-color-default-border);
+  }
+
+  details .arrow {
+    transition: transform 80ms ease;
+  }
+
+  details:open {
+    summary {
+      color: white;
+    }
+
+    .arrow {
+      transform: rotate(180deg);
+    }
+  }
+}
