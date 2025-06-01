@@ -20,8 +20,9 @@ export function StaticKanbanColumn({
   items,
   ...props
 }: StaticKanbanColumnProps) {
-  const classNames = `column static${className ? ` ${className}` : ""}`;
   const statusClassName = status.name.toLowerCase().replace(" ", "-");
+  const classNames = `column static ${statusClassName}${className ? ` ${className}` : ""}`;
+
   return (
     <Box component="details" className={classNames} {...props}>
       <Flex component="summary" justify="space-between" align="center" p="xs">

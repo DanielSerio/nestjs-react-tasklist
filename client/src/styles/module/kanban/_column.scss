@@ -17,4 +17,42 @@
       transform: rotate(180deg);
     }
   }
+
+  .column.static summary + div {
+    position: relative;
+    padding-left: 8px;
+
+    &::after {
+      position: absolute;
+      content: " ";
+      width: 2px;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 1;
+      background-size: cover;
+    }
+  }
+
+  $names: new, active, paused, on-hold, qa, complete;
+
+  @each $name in $names {
+    .column.static.#{$name} summary + div::after {
+      @if ($name == paused or $name == qa) {
+        background: linear-gradient(
+          transparent,
+          var(--status-#{$name}-text) 15%,
+          var(--status-#{$name}-text) 85%,
+          transparent
+        );
+      } @else {
+        background: linear-gradient(
+          transparent,
+          var(--status-#{$name}-bg) 15%,
+          var(--status-#{$name}-bg) 85%,
+          transparent
+        );
+      }
+    }
+  }
 }
