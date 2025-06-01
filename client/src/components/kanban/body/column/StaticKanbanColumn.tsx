@@ -3,6 +3,7 @@ import { Badge, Box, Flex, Group, ScrollArea, Text } from "@mantine/core";
 import type { DetailsHTMLAttributes } from "react";
 import { TbChevronDown, TbChevronUp } from "react-icons/tb";
 import { ColumnCountIndicator } from "./ColumnCountIndicator";
+import { StaticKanbanCard } from "#components/kanban/cards/StaticKanbanCard";
 
 export interface StaticKanbanColumnProps
   extends DetailsHTMLAttributes<HTMLDetailsElement> {
@@ -41,9 +42,11 @@ export function StaticKanbanColumn({
       </Flex>
       <Box>
         {!!children && <Box className="sticky">{children}</Box>}
-        {items.map((item) => {
-          return <div key={item.id}>{JSON.stringify(item)}</div>;
-        })}
+        <Flex direction="column" gap="xs" p="xs">
+          {items.map((item) => {
+            return <StaticKanbanCard key={item.id} task={item} />;
+          })}
+        </Flex>
       </Box>
     </Box>
   );
