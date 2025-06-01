@@ -1,7 +1,16 @@
-import { ActionIcon, Flex, Text } from "@mantine/core";
+import { ActionIcon, Flex, Loader, Text } from "@mantine/core";
+import type { useTaskDrawer } from "#hooks/kanban/useTaskDrawer";
 import { TbPlus } from "react-icons/tb";
 
-export function KanbanHeader() {
+export function KanbanHeader({
+  actionsDisabled,
+  taskDrawerController: [{ isOpen }, { openCreateTaskDrawer }],
+}: {
+  actionsDisabled: boolean;
+  taskDrawerController: ReturnType<typeof useTaskDrawer>;
+}) {
+  const isDisabled = actionsDisabled || isOpen;
+
   return (
     <Flex
       h={48}
@@ -12,8 +21,15 @@ export function KanbanHeader() {
     >
       <Text size="xl">Tasks</Text>
 
-      <ActionIcon title="Add Task" variant="light" color="blue">
-        <TbPlus />
+      <ActionIcon
+        title="Add Task"
+        variant="light"
+        color="blue"
+        disabled={isDisabled}
+        onClick={openCreateTaskDrawer}
+      >
+        {!actionsDisabled && <TbPlus />}
+        {!!actionsDisabled && <Loader color="gray" size="xs" />}
       </ActionIcon>
     </Flex>
   );

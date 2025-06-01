@@ -4,11 +4,22 @@ import { DraggableKanban } from "./body/DraggableKanban";
 import type { KanbanProps } from "./types";
 import { KanbanHeader } from "./header/KanbanHeader";
 
-export function Kanban({ tasks, statusesQuery, categoriesQuery }: KanbanProps) {
+export function Kanban({
+  taskDrawerController,
+  tasks,
+  statusesQuery,
+  categoriesQuery,
+}: KanbanProps) {
+  const queriesAreResolved =
+    tasks.isSuccess && statusesQuery.isSuccess && categoriesQuery.isSuccess;
+
   return (
     <Box className="kanban">
       <Flex className="kanban-inner" direction="column">
-        <KanbanHeader />
+        <KanbanHeader
+          actionsDisabled={!queriesAreResolved}
+          taskDrawerController={taskDrawerController}
+        />
 
         <Flex className="kanban-body">
           <StaticKanban

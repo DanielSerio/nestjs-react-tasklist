@@ -5,6 +5,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import "../styles/export/dashboard.scss";
 import { useEntityList } from "#hooks/useEntityList";
 import { useTasks } from "#hooks/useTasks";
+import { TaskDrawer } from "#components/kanban/drawer/TaskDrawer";
+import { useTaskDrawer } from "#hooks/kanban/useTaskDrawer";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
@@ -28,11 +30,14 @@ function RouteComponent() {
   });
 
   const tasks = useTasks(12);
+  const taskDrawerController = useTaskDrawer();
 
   return (
     <AppShellMain>
+      <TaskDrawer controller={taskDrawerController} />
       <Kanban
         tasks={tasks}
+        taskDrawerController={taskDrawerController}
         statusesQuery={statusesQuery}
         categoriesQuery={categoriesQuery}
       />
