@@ -1,0 +1,36 @@
+.kanban {
+  position: absolute;
+  height: calc(100svh - 48px);
+  top: 48px;
+  left: 0;
+  width: 100%;
+  max-width: 100svw;
+
+  .kanban-inner {
+    container-type: size;
+    container-name: kanban;
+  }
+}
+
+//small screens/default
+.kanban-body {
+  .draggable-containers {
+    display: none;
+  }
+
+  .containers {
+    display: flex;
+  }
+}
+//large screens
+@container kanban (min-width: 1200px) {
+  .kanban .kanban-body {
+    .containers {
+      display: none;
+    }
+
+    .draggable-containers {
+      display: flex;
+    }
+  }
+}

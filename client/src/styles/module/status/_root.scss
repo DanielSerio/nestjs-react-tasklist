@@ -1,0 +1,51 @@
+@use "sass:map";
+
+$colors: (
+  new: (
+    color: blue,
+    bg: 9,
+    text: 3,
+  ),
+  active: (
+    color: teal,
+    bg: 9,
+    text: 3,
+  ),
+  paused: (
+    color: orange,
+    bg: 8,
+    text: 4,
+  ),
+  on-hold: (
+    color: red,
+    bg: 9,
+    text: 5,
+  ),
+  qa: (
+    color: yellow,
+    bg: 9,
+    text: 3,
+  ),
+  complete: (
+    color: green,
+    bg: 9,
+    text: 4,
+  ),
+);
+
+body {
+  @each $name, $map in $colors {
+    $bg: map.get($map, bg);
+    $text: map.get($map, text);
+    $color: map.get($map, color);
+
+    --status-#{$name}-bg: #{var(--mantine-color-#{$color + ""}-#{$bg})};
+    --status-#{$name}-text: #{var(--mantine-color-#{$color + ""}-#{$text})};
+
+    .badge-status-#{$name} {
+      border: 1px solid;
+      color: var(--status-#{$name}-text);
+      opacity: 0.8;
+    }
+  }
+}
