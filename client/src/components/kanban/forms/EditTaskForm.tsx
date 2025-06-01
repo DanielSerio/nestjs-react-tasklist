@@ -9,6 +9,7 @@ import {
 import { TbCancel, TbDeviceFloppy, TbTrash } from "react-icons/tb";
 import type { TaskEditFormProps } from "./types";
 import { useTaskEditForm } from "#hooks/kanban/useTaskForm";
+import { StatusSelect } from "#components/core/control/StatusSelect";
 
 export function EditTaskForm({ task }: TaskEditFormProps) {
   const form = useTaskEditForm(task);
@@ -25,11 +26,7 @@ export function EditTaskForm({ task }: TaskEditFormProps) {
             placeholder="Task"
             {...form.getInputProps("name")}
           />
-          <Select
-            label="Status"
-            data={[{ value: "", label: "-- Status --" }]}
-            {...form.getInputProps("statusId")}
-          />
+          <StatusSelect label="Status" {...form.getInputProps("statusId")} />
           <Select
             label="Category"
             data={[{ value: "", label: "-- Category --" }]}

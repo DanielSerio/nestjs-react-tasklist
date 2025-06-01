@@ -14,14 +14,14 @@ export function useTaskCreateForm() {
     },
     validate: zodResolver(
       z.object({
-        categoryId: z
+        categoryId: z.coerce
           .number()
           .int()
           .positive()
           .nullable()
           .transform((v) => (v === null ? "" : v)),
         name: z.string().trim().min(1).max(255),
-        priority: z
+        priority: z.coerce
           .number()
           .int()
           .nullable()
@@ -36,16 +36,7 @@ export type TaskCreateFormType = ReturnType<typeof useTaskCreateForm>;
 export function useTaskEditForm(
   task: Omit<Task, "createdAt" | "updatedAt" | "deletedAt">
 ) {
-  console.log(
-    JSON.stringify({
-      id: task.id,
-      categoryId: task.categoryId ?? "",
-      statusId: task.statusId ?? "",
-      name: task.name ?? "",
-      priority: task.priority ?? "",
-    })
-  );
-  const form = useForm({
+  return useForm({
     mode: "controlled",
     initialValues: {
       id: task.id,
@@ -57,15 +48,15 @@ export function useTaskEditForm(
     validate: zodResolver(
       z.object({
         id: z.number().int().positive(),
-        categoryId: z
+        categoryId: z.coerce
           .number()
           .int()
           .positive()
           .nullable()
           .transform((v) => (v === null ? "" : v)),
-        statusId: z.number().int().positive(),
+        statusId: z.coerce.number().int().positive(),
         name: z.string().trim().min(1).max(255),
-        priority: z
+        priority: z.coerce
           .number()
           .int()
           .nullable()
@@ -76,8 +67,6 @@ export function useTaskEditForm(
       >)
     ),
   });
-
-  return form;
 }
 
 export type TaskEditFormType = ReturnType<typeof useTaskEditForm>;
