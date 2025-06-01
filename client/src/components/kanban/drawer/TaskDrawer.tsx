@@ -1,5 +1,6 @@
-import { Button, Drawer } from "@mantine/core";
+import { Drawer } from "@mantine/core";
 import type { useTaskDrawer } from "#hooks/kanban/useTaskDrawer";
+import { TaskForm } from "../forms/TaskForm";
 
 export function TaskDrawer({
   controller: [state, methods],
@@ -13,9 +14,7 @@ export function TaskDrawer({
       opened={state.isOpen}
       onClose={methods.dismissTaskDrawer}
     >
-      <Button color="gray" onClick={methods.dismissTaskDrawer}>
-        Cancel
-      </Button>
+      <TaskForm task={state.context} />
     </Drawer>
   );
 }
