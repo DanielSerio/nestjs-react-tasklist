@@ -1,5 +1,5 @@
-import { useDraggableKanban } from "#hooks/kanban/useKanban";
 import { Box, Flex } from "@mantine/core";
+import { useDraggableKanban } from "#hooks/kanban/useKanban";
 import type { DraggableKanbanProps } from "../types";
 
 export function DraggableKanban({

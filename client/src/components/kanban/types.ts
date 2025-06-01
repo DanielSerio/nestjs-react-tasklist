@@ -12,6 +12,7 @@ export interface KanbanProps extends Omit<KanbanBaseProps, 'tasks'> {
 
 interface KanbanBodyProps extends KanbanBaseProps {
   isLoading?: boolean | null;
+  taskDrawerController: ReturnType<typeof useTaskDrawer>;
 }
 
 export type StaticKanbanProps = Pretty<KanbanBodyProps>;

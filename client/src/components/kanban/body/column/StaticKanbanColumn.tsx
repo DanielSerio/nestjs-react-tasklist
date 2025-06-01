@@ -1,9 +1,10 @@
-import type { Task } from "#types/task.types";
-import { Badge, Box, Flex, Group, ScrollArea, Text } from "@mantine/core";
 import type { DetailsHTMLAttributes } from "react";
-import { TbChevronDown, TbChevronUp } from "react-icons/tb";
+import { Badge, Box, Flex, Group } from "@mantine/core";
+import { TbChevronDown } from "react-icons/tb";
 import { ColumnCountIndicator } from "./ColumnCountIndicator";
 import { StaticKanbanCard } from "#components/kanban/cards/StaticKanbanCard";
+import type { Task } from "#types/task.types";
+import type { useTaskDrawer } from "#hooks/kanban/useTaskDrawer";
 
 export interface StaticKanbanColumnProps
   extends DetailsHTMLAttributes<HTMLDetailsElement> {
@@ -12,12 +13,14 @@ export interface StaticKanbanColumnProps
     name: string;
   };
   items: Task[];
+  taskDrawerController: ReturnType<typeof useTaskDrawer>;
 }
 
 export function StaticKanbanColumn({
   status,
   children,
   className,
+  taskDrawerController: [_, { openEditTaskDrawer }],
   items,
   ...props
 }: StaticKanbanColumnProps) {
@@ -44,7 +47,13 @@ export function StaticKanbanColumn({
         {!!children && <Box className="sticky">{children}</Box>}
         <Flex direction="column" gap="xs" p="xs">
           {items.map((item) => {
-            return <StaticKanbanCard key={item.id} task={item} />;
+            return (
+              <StaticKanbanCard
+                key={item.id}
+                task={item}
+                onEditClick={() => openEditTaskDrawer(item)}
+              />
+            );
           })}
         </Flex>
       </Box>

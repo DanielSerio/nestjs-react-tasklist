@@ -7,6 +7,7 @@ export function StaticKanban({
   isLoading,
   tasks,
   statusesQuery,
+  taskDrawerController,
 }: StaticKanbanProps) {
   useEffect(() => {
     console.info(tasks);
@@ -33,6 +34,7 @@ export function StaticKanban({
 
         return (
           <StaticKanbanColumn
+            taskDrawerController={taskDrawerController}
             key={status.id}
             status={{ id: status.id, name: status.name }}
             items={items}

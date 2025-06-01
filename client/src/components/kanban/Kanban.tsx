@@ -23,13 +23,15 @@ export function Kanban({
 
         <Flex className="kanban-body">
           <StaticKanban
-            isLoading={tasks.isLoading}
+            taskDrawerController={taskDrawerController}
+            isLoading={tasks.isLoading || !queriesAreResolved}
             tasks={tasks.data}
             statusesQuery={statusesQuery}
             categoriesQuery={categoriesQuery}
           />
           <DraggableKanban
-            isLoading={tasks.isLoading}
+            taskDrawerController={taskDrawerController}
+            isLoading={tasks.isLoading || !queriesAreResolved}
             tasks={tasks.data}
             statusesQuery={statusesQuery}
             categoriesQuery={categoriesQuery}

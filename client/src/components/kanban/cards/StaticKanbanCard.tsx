@@ -1,7 +1,6 @@
 import type { Task } from "#types/task.types";
 import {
   Badge,
-  Box,
   Button,
   Card,
   Flex,
@@ -15,6 +14,8 @@ import { TbEdit } from "react-icons/tb";
 export interface StaticKanbanCardProps
   extends AreaHTMLAttributes<HTMLDivElement> {
   task: Task;
+  disabled?: boolean;
+  onEditClick: (task: Task) => void;
 }
 
 function StaticCardSection({
@@ -32,6 +33,8 @@ export function StaticKanbanCard({
   task,
   children,
   className,
+  disabled,
+  onEditClick,
   ...props
 }: StaticKanbanCardProps) {
   const classNames = `kanban-card${className ? ` ${className}` : ""}`;
@@ -65,7 +68,13 @@ export function StaticKanbanCard({
 
       <StaticCardSection c="footer">
         <Group justify="flex-end">
-          <Button variant="subtle" size="xs" rightSection={<TbEdit />}>
+          <Button
+            variant="subtle"
+            size="xs"
+            rightSection={<TbEdit />}
+            disabled={disabled}
+            onClick={() => onEditClick(task)}
+          >
             <Text fz="sm">Edit</Text>
           </Button>
         </Group>
