@@ -1,4 +1,4 @@
-import type { DetailsHTMLAttributes } from "react";
+import { useEffect, useRef, type DetailsHTMLAttributes } from "react";
 import { Badge, Box, Flex, Group } from "@mantine/core";
 import { TbChevronDown } from "react-icons/tb";
 import { ColumnCountIndicator } from "./ColumnCountIndicator";
@@ -24,11 +24,16 @@ export function StaticKanbanColumn({
   items,
   ...props
 }: StaticKanbanColumnProps) {
+  const ref = useRef<HTMLDetailsElement>(null);
   const statusClassName = status.name.toLowerCase().replace(" ", "-");
   const classNames = `column static ${statusClassName}${className ? ` ${className}` : ""}`;
 
+  if (ref.current && items.length > 0) {
+    ref.current.open = true;
+  }
+
   return (
-    <Box component="details" className={classNames} {...props}>
+    <Box component="details" className={classNames} {...props} ref={ref}>
       <Flex component="summary" justify="space-between" align="center" p="xs">
         <Badge color="dark" className={`badge-status-${statusClassName}`}>
           {status.name}
