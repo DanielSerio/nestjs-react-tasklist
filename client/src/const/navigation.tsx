@@ -9,7 +9,7 @@ export interface NavItemProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 export const NAV_ITEMS: NavItemProps[] = [
   {
     path: "/",
-    label: "Home",
+    label: "Dashboard",
     icon: <TbHome2 />,
   },
   {
