@@ -1,5 +1,35 @@
 .kanban {
-  * {
-    border: 1px dotted grey;
+  position: absolute;
+  height: calc(100svh - 48px);
+  top: 48px;
+  left: 0;
+  width: 100%;
+
+  .kanban-inner {
+    container-type: size;
+    container-name: kanban;
+  }
+}
+
+//small screens/default
+.kanban-body {
+  .draggable-containers {
+    display: none;
+  }
+
+  .containers {
+    display: flex;
+  }
+}
+//large screens
+@container kanban (min-width: 1200px) {
+  .kanban .kanban-body {
+    .containers {
+      display: none;
+    }
+
+    .draggable-containers {
+      display: flex;
+    }
   }
 }
