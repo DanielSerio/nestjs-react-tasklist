@@ -1,15 +1,26 @@
 import { Box, Flex } from "@mantine/core";
 import { StaticKanban } from "./body/StaticKanban";
 import { DraggableKanban } from "./body/DraggableKanban";
+import type { KanbanProps } from "./types";
 
-export function Kanban() {
+export function Kanban({ tasks, statusesQuery, categoriesQuery }: KanbanProps) {
   return (
     <Box className="kanban">
       <Flex className="kanban-inner" direction="column">
         <Flex className="kanban-header">Header</Flex>
         <Flex className="kanban-body">
-          <StaticKanban />
-          <DraggableKanban />
+          <StaticKanban
+            isLoading={tasks.isLoading}
+            tasks={tasks.data}
+            statusesQuery={statusesQuery}
+            categoriesQuery={categoriesQuery}
+          />
+          <DraggableKanban
+            isLoading={tasks.isLoading}
+            tasks={tasks.data}
+            statusesQuery={statusesQuery}
+            categoriesQuery={categoriesQuery}
+          />
         </Flex>
       </Flex>
     </Box>

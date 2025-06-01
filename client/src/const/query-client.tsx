@@ -9,4 +9,7 @@ export const QUERY_KEYS = {
   categories: {
     list: ["categories", "list"],
   },
+  tasks: {
+    list: ["tasks", "list"],
+  },
 };
