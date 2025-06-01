@@ -1,13 +1,7 @@
-import {
-  Button,
-  Flex,
-  Group,
-  NumberInput,
-  Select,
-  Textarea,
-} from "@mantine/core";
+import { Button, Flex, Group, NumberInput, Textarea } from "@mantine/core";
 import { TbCancel, TbPlus } from "react-icons/tb";
 import { useTaskCreateForm } from "#hooks/kanban/useTaskForm";
+import { CategorySelect } from "#components/core/control/CategorySelect";
 
 export function CreateTaskForm() {
   const form = useTaskCreateForm();
@@ -24,11 +18,9 @@ export function CreateTaskForm() {
             placeholder="Task"
             {...form.getInputProps("name")}
           />
-          <Select
+          <CategorySelect
             label="Category"
-            value=""
-            data={[{ value: "", label: "-- Category --" }]}
-            {...form.getInputProps("category")}
+            {...form.getInputProps("categoryId")}
           />
           <NumberInput
             label="Priority"

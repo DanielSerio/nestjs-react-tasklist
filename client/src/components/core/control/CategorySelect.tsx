@@ -2,12 +2,12 @@ import { forwardRef, useMemo, type ForwardedRef } from "react";
 import { Select, type SelectProps } from "@mantine/core";
 import { useEntityList } from "#hooks/useEntityList";
 
-function StatusSelectComponent(
+function CategorySelectComponent(
   props: Omit<SelectProps, "options">,
   ref?: ForwardedRef<HTMLInputElement>
 ) {
   const query = useEntityList({
-    endpoint: "statuses",
+    endpoint: "categories",
     paging: {
       limit: 100_000,
       offset: 0,
@@ -15,11 +15,13 @@ function StatusSelectComponent(
   });
 
   const options = useMemo(
-    () =>
-      (query.data?.records ?? []).map(({ name, id }) => ({
+    () => [
+      { value: "", label: "-- Category --" },
+      ...(query.data?.records ?? []).map(({ name, id }) => ({
         value: `${id}`,
         label: name,
       })),
+    ],
     [query.data, query.fetchStatus]
   );
 
@@ -45,4 +47,4 @@ function StatusSelectComponent(
   );
 }
 
-export const StatusSelect = forwardRef(StatusSelectComponent);
+export const CategorySelect = forwardRef(CategorySelectComponent);
