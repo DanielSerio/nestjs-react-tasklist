@@ -43,8 +43,9 @@ body {
     --status-#{$name}-text: #{var(--mantine-color-#{$color + ""}-#{$text})};
 
     .badge-status-#{$name} {
-      border-color: var(--status-#{$name}-bg);
+      border: 1px solid;
       color: var(--status-#{$name}-text);
+      opacity: 0.8;
     }
   }
 }

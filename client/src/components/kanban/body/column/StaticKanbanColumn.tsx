@@ -1,7 +1,8 @@
 import type { Task } from "#types/task.types";
-import { Badge, Box, Flex, ScrollArea, Text } from "@mantine/core";
+import { Badge, Box, Flex, Group, ScrollArea, Text } from "@mantine/core";
 import type { DetailsHTMLAttributes } from "react";
 import { TbChevronDown, TbChevronUp } from "react-icons/tb";
+import { ColumnCountIndicator } from "./ColumnCountIndicator";
 
 export interface StaticKanbanColumnProps
   extends DetailsHTMLAttributes<HTMLDetailsElement> {
@@ -20,20 +21,21 @@ export function StaticKanbanColumn({
   ...props
 }: StaticKanbanColumnProps) {
   const classNames = `column static${className ? ` ${className}` : ""}`;
-
+  const statusClassName = status.name.toLowerCase().replace(" ", "-");
   return (
     <Box component="details" className={classNames} {...props}>
       <Flex component="summary" justify="space-between" align="center" p="xs">
-        <Badge
-          fw="lighter"
-          color="dark"
-          className={`badge-status-${status.name.toLowerCase().replace(" ", "-")}`}
-        >
+        <Badge color="dark" className={`badge-status-${statusClassName}`}>
           {status.name}
         </Badge>
 
-        <Box className="arrow" lh={0} mr={6}>
-          <TbChevronDown />
+        <Box mr={6}>
+          <Group>
+            {items.length > 0 && <ColumnCountIndicator count={items.length} />}
+            <Box className="arrow" lh={0}>
+              <TbChevronDown />
+            </Box>
+          </Group>
         </Box>
       </Flex>
       <Box>
