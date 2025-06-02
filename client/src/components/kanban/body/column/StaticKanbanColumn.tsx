@@ -28,10 +28,11 @@ export function StaticKanbanColumn({
   const statusClassName = status.name.toLowerCase().replace(" ", "-");
   const classNames = `column static ${statusClassName}${className ? ` ${className}` : ""}`;
 
-  if (ref.current && items.length > 0) {
-    ref.current.open = true;
-  }
-
+  useEffect(() => {
+    if (ref.current && items.length > 0) {
+      ref.current.open = true;
+    }
+  }, []);
   return (
     <Box component="details" className={classNames} {...props} ref={ref}>
       <Flex component="summary" justify="space-between" align="center" p="xs">

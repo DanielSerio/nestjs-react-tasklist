@@ -18,7 +18,7 @@ export interface StaticKanbanCardProps
   onEditClick: (task: Task) => void;
 }
 
-function StaticCardSection({
+export function StaticCardSection({
   children,
   ...props
 }: PropsWithChildren<CardSectionProps>) {

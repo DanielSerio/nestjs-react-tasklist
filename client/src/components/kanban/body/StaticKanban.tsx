@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { Flex } from "@mantine/core";
 import type { StaticKanbanProps } from "../types";
 import { StaticKanbanColumn } from "./column/StaticKanbanColumn";
+import SkeletonKanbanCard from "../cards/SkeletonKanbanCard";
+import { StaticSkeletonKanbanColumn } from "./column/StaticSkeletonKanbanColumn";
 
 export function StaticKanban({
   isLoading,
@@ -13,9 +15,20 @@ export function StaticKanban({
     console.info(tasks);
   }, [tasks]);
 
-  //TODO: skeleton here
   if (isLoading || statusesQuery.isLoading) {
-    return <>Loading...</>;
+    return (
+      <Flex direction="column" className="containers">
+        {[...new Array(3)].map((_, i) => {
+          return (
+            <StaticSkeletonKanbanColumn key={i + 1}>
+              <SkeletonKanbanCard />
+              <SkeletonKanbanCard />
+              <SkeletonKanbanCard />
+            </StaticSkeletonKanbanColumn>
+          );
+        })}
+      </Flex>
+    );
   }
 
   //TODO: error component here
