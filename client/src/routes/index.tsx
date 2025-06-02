@@ -29,7 +29,7 @@ function RouteComponent() {
     },
   });
 
-  const tasks = useTasks(12);
+  const tasks = useTasks();
   const taskDrawerController = useTaskDrawer();
 
   return (

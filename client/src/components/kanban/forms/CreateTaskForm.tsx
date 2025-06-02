@@ -10,7 +10,7 @@ import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "#const/query-client";
 
-export function CreateTaskForm({ onCancelClick }: TaskCreateFormProps) {
+export function CreateTaskForm({ onDismiss }: TaskCreateFormProps) {
   const queryClient = useQueryClient();
   const form = useTaskCreateForm();
   const mutation = useCreateTaskMutation();
@@ -26,6 +26,8 @@ export function CreateTaskForm({ onCancelClick }: TaskCreateFormProps) {
         color: "green",
         message: "Successfully created task",
       });
+
+      onDismiss();
 
       return;
     } catch (err) {
@@ -65,7 +67,7 @@ export function CreateTaskForm({ onCancelClick }: TaskCreateFormProps) {
           <SubmitButton isBusy={false} icon={TbPlus} disabled={!form.isValid()}>
             Create
           </SubmitButton>
-          <CancelButton onClick={onCancelClick} />
+          <CancelButton onClick={onDismiss} />
         </Group>
       </form>
     </Flex>

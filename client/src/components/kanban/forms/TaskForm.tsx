@@ -13,8 +13,8 @@ export function TaskForm({
   dismissDrawer: () => void;
 }) {
   if (task) {
-    return <EditTaskForm task={task} onCancelClick={dismissDrawer} />;
+    return <EditTaskForm task={task} onDismiss={dismissDrawer} />;
   }
 
-  return <CreateTaskForm onCancelClick={dismissDrawer} />;
+  return <CreateTaskForm onDismiss={dismissDrawer} />;
 }

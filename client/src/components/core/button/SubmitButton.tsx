@@ -24,6 +24,7 @@ export function SubmitButton({
     <Button
       {...props}
       fullWidth
+      type="submit"
       rightSection={isBusy ? <Loader color="gray" size="xs" /> : <Icon />}
       disabled={isBusy || disabled}
     >

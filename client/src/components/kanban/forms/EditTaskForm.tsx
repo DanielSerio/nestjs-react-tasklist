@@ -14,7 +14,7 @@ import {
 } from "#hooks/kanban/mutations";
 import { QUERY_KEYS } from "#const/query-client";
 
-export function EditTaskForm({ task, onCancelClick }: TaskEditFormProps) {
+export function EditTaskForm({ task, onDismiss }: TaskEditFormProps) {
   const queryClient = useQueryClient();
   const form = useTaskEditForm(task);
   const updateMutation = useUpdateTaskMutation(task.id);
@@ -39,6 +39,8 @@ export function EditTaskForm({ task, onCancelClick }: TaskEditFormProps) {
         message: "Successfully updated task",
       });
 
+      onDismiss();
+
       return;
     } catch (err) {
       notifications.show({
@@ -61,6 +63,8 @@ export function EditTaskForm({ task, onCancelClick }: TaskEditFormProps) {
         color: "green",
         message: "Successfully deleted task",
       });
+
+      onDismiss();
 
       return;
     } catch (err) {
@@ -111,7 +115,7 @@ export function EditTaskForm({ task, onCancelClick }: TaskEditFormProps) {
           >
             Save
           </SubmitButton>
-          <CancelButton onClick={onCancelClick} />
+          <CancelButton onClick={onDismiss} />
           <Button
             type="button"
             fullWidth
