@@ -57,7 +57,7 @@ export function useTaskEditForm(
           .nullable()
           .transform((v) => (v === null ? "" : v)),
         statusId: z.coerce.number().int().positive(),
-        name: z.string().trim().min(1).max(355),
+        name: z.string().trim().min(1).max(512),
         priority: z.coerce
           .number()
           .int()
