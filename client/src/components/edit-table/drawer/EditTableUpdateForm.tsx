@@ -7,7 +7,7 @@ import { FormValidators } from "./form.validators";
 import type { EditTableEntity } from "#const/edit-table";
 import { BASE_URL } from "#const/api";
 import { getSingularNameFromEndpoint } from "#utilities/entity.helpers";
-import { Button, Flex, Group, Loader, TextInput } from "@mantine/core";
+import { Flex, Group, TextInput } from "@mantine/core";
 import { TbDeviceFloppy } from "react-icons/tb";
 import type { ZodError } from "zod";
 import { SubmitButton } from "#components/core/button/SubmitButton";
@@ -74,8 +74,7 @@ export function EditTableUpdateForm({
         <TextInput label="Name" required {...form.getInputProps("name")} />
       </Flex>
       <Flex component="footer" mt="xs">
-        <Group gap="xs">
-          <CancelButton onClick={onClose} />
+        <Group gap="xs" w="100%">
           <SubmitButton
             isBusy={mutation.isPending}
             disabled={!form.isValid()}
@@ -83,6 +82,7 @@ export function EditTableUpdateForm({
           >
             Save
           </SubmitButton>
+          <CancelButton onClick={onClose} />
         </Group>
       </Flex>
     </form>

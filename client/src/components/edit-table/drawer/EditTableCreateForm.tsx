@@ -81,8 +81,7 @@ export function EditTableCreateForm({
         />
       </Flex>
       <Flex component="footer" mt="xs">
-        <Group gap="xs">
-          <CancelButton onClick={onClose} />
+        <Group gap="xs" w="100%">
           <SubmitButton
             isBusy={mutation.isPending}
             disabled={!form.isValid()}
@@ -90,6 +89,7 @@ export function EditTableCreateForm({
           >
             Save
           </SubmitButton>
+          <CancelButton onClick={onClose} />
         </Group>
       </Flex>
     </form>

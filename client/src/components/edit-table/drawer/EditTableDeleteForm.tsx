@@ -105,7 +105,6 @@ export function EditTableDeleteForm({
       </Box>
       <Flex component="footer">
         <Group gap="xs" w="100%">
-          <CancelButton onClick={onClose} />
           <Button
             type="submit"
             color="red"
@@ -121,6 +120,7 @@ export function EditTableDeleteForm({
           >
             <span>Delete</span>
           </Button>
+          <CancelButton onClick={onClose} />
         </Group>
       </Flex>
     </form>
