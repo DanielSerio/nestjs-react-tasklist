@@ -16,6 +16,7 @@ import { TbTrash } from "react-icons/tb";
 import type { EditTableDeleteModalFormProps } from "./form.props";
 import { BASE_URL } from "#const/api";
 import { getSingularNameFromEndpoint } from "#utilities/entity.helpers";
+import { CancelButton } from "#components/core/button/CancelButton";
 
 export function EditTableDeleteForm({
   endpoint,
@@ -88,24 +89,26 @@ export function EditTableDeleteForm({
   };
 
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)}>
-      <Box py="xs">
-        <Text>
-          Are you sure you want to delete "<strong>{state.name}</strong>"?
-        </Text>
+    <form className="edit-table-form" onSubmit={form.onSubmit(handleSubmit)}>
+      <Box>
+        <Box py="xs">
+          <Text>
+            Are you sure you want to delete "<strong>{state.name}</strong>"?
+          </Text>
+        </Box>
+        <Checkbox
+          color="red"
+          label="I'm Sure"
+          required
+          {...form.getInputProps("imSure")}
+        />
       </Box>
-      <Flex direction="column">
-        <Checkbox label="I'm Sure" required {...form.getInputProps("imSure")} />
-      </Flex>
-      <Flex component="footer" mt="xs">
-        <Group gap="xs">
-          <Button color="gray" size="xs">
-            Cancel
-          </Button>
+      <Flex component="footer">
+        <Group gap="xs" w="100%">
           <Button
             type="submit"
-            size="xs"
             color="red"
+            fullWidth
             disabled={!form.isValid() || mutation.isPending}
             rightSection={
               mutation.isPending ? (
@@ -117,6 +120,7 @@ export function EditTableDeleteForm({
           >
             <span>Delete</span>
           </Button>
+          <CancelButton onClick={onClose} />
         </Group>
       </Flex>
     </form>

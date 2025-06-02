@@ -1,0 +1,10 @@
+.edit-table-form {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid transparent;
+  height: calc(100svh - 112px);
+
+  & > div {
+    flex: 1;
+  }
+}

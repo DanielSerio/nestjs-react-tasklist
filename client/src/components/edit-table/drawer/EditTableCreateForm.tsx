@@ -10,6 +10,8 @@ import { BASE_URL } from "#const/api";
 import type { EditTableEntity } from "#const/edit-table";
 import { getSingularNameFromEndpoint } from "#utilities/entity.helpers";
 import type { ZodError } from "zod";
+import { CancelButton } from "#components/core/button/CancelButton";
+import { SubmitButton } from "#components/core/button/SubmitButton";
 
 export function EditTableCreateForm({
   endpoint,
@@ -69,7 +71,7 @@ export function EditTableCreateForm({
   };
 
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)}>
+    <form className="edit-table-form" onSubmit={form.onSubmit(handleSubmit)}>
       <Flex direction="column">
         <TextInput
           label="Name"
@@ -79,24 +81,15 @@ export function EditTableCreateForm({
         />
       </Flex>
       <Flex component="footer" mt="xs">
-        <Group gap="xs">
-          <Button color="gray" size="xs">
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            size="xs"
-            disabled={!form.isValid() || mutation.isPending}
-            rightSection={
-              mutation.isPending ? (
-                <Loader color="gray" size="xs" />
-              ) : (
-                <TbDeviceFloppy />
-              )
-            }
+        <Group gap="xs" w="100%">
+          <SubmitButton
+            isBusy={mutation.isPending}
+            disabled={!form.isValid()}
+            icon={TbDeviceFloppy}
           >
-            <span>Save</span>
-          </Button>
+            Save
+          </SubmitButton>
+          <CancelButton onClick={onClose} />
         </Group>
       </Flex>
     </form>

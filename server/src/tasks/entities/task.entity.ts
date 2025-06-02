@@ -10,7 +10,7 @@ export class Task implements TaskRecord {
 
   @Column({
     type: 'varchar',
-    length: 255
+    length: 512
   })
   name: string;
 
