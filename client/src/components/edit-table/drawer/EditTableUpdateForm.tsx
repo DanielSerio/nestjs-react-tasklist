@@ -10,6 +10,8 @@ import { getSingularNameFromEndpoint } from "#utilities/entity.helpers";
 import { Button, Flex, Group, Loader, TextInput } from "@mantine/core";
 import { TbDeviceFloppy } from "react-icons/tb";
 import type { ZodError } from "zod";
+import { SubmitButton } from "#components/core/button/SubmitButton";
+import { CancelButton } from "#components/core/button/CancelButton";
 
 export function EditTableUpdateForm({
   endpoint,
@@ -67,29 +69,20 @@ export function EditTableUpdateForm({
   };
 
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)}>
+    <form className="edit-table-form" onSubmit={form.onSubmit(handleSubmit)}>
       <Flex direction="column">
         <TextInput label="Name" required {...form.getInputProps("name")} />
       </Flex>
       <Flex component="footer" mt="xs">
         <Group gap="xs">
-          <Button color="gray" size="xs">
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            size="xs"
-            disabled={!form.isValid() || mutation.isPending}
-            rightSection={
-              mutation.isPending ? (
-                <Loader color="gray" size="xs" />
-              ) : (
-                <TbDeviceFloppy />
-              )
-            }
+          <CancelButton onClick={onClose} />
+          <SubmitButton
+            isBusy={mutation.isPending}
+            disabled={!form.isValid()}
+            icon={TbDeviceFloppy}
           >
-            <span>Save</span>
-          </Button>
+            Save
+          </SubmitButton>
         </Group>
       </Flex>
     </form>
