@@ -6,9 +6,15 @@ import { StatusSelect } from "#components/core/control/StatusSelect";
 import { CategorySelect } from "#components/core/control/CategorySelect";
 import { CancelButton } from "#components/core/button/CancelButton";
 import { SubmitButton } from "#components/core/button/SubmitButton";
+import {
+  useDeleteTaskMutation,
+  useUpdateTaskMutation,
+} from "#hooks/kanban/mutations";
 
 export function EditTaskForm({ task, onCancelClick }: TaskEditFormProps) {
   const form = useTaskEditForm(task);
+  const updateMutation = useUpdateTaskMutation(task.id);
+  const deleteMutation = useDeleteTaskMutation(task.id);
 
   return (
     <Flex h="100%" direction="column">

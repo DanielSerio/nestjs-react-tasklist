@@ -11,5 +11,8 @@ export const QUERY_KEYS = {
   },
   tasks: {
     list: ["tasks", "list"],
+    create: ["tasks", "create"],
+    update: ["tasks", "update"],
+    delete: ["tasks", "delete"],
   },
 };

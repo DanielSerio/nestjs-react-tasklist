@@ -5,9 +5,11 @@ import { CategorySelect } from "#components/core/control/CategorySelect";
 import { CancelButton } from "#components/core/button/CancelButton";
 import { SubmitButton } from "#components/core/button/SubmitButton";
 import type { TaskCreateFormProps } from "./types";
+import { useCreateTaskMutation } from "#hooks/kanban/mutations";
 
 export function CreateTaskForm({ onCancelClick }: TaskCreateFormProps) {
   const form = useTaskCreateForm();
+  const mutation = useCreateTaskMutation();
 
   return (
     <Flex h="100%" direction="column">
