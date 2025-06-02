@@ -14,7 +14,10 @@ export function TaskDrawer({
       opened={state.isOpen}
       onClose={methods.dismissTaskDrawer}
     >
-      <TaskForm task={state.context} />
+      <TaskForm
+        task={state.context}
+        dismissDrawer={methods.dismissTaskDrawer}
+      />
     </Drawer>
   );
 }

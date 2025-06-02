@@ -1,5 +1,9 @@
 import type { Task } from "#types/task.types";
 
-export interface TaskEditFormProps {
+export interface TaskCreateFormProps {
+  onCancelClick: () => void;
+}
+
+export interface TaskEditFormProps extends TaskCreateFormProps {
   task: Task;
 }

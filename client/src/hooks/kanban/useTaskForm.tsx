@@ -7,6 +7,7 @@ import { z } from "zod";
 export function useTaskCreateForm() {
   return useForm({
     mode: "controlled",
+    validateInputOnChange: true,
     initialValues: {
       categoryId: null,
       name: "",
@@ -20,7 +21,7 @@ export function useTaskCreateForm() {
           .positive()
           .nullable()
           .transform((v) => (v === null ? "" : v)),
-        name: z.string().trim().min(1).max(255),
+        name: z.string().trim().min(1).max(355),
         priority: z.coerce
           .number()
           .int()
@@ -38,10 +39,11 @@ export function useTaskEditForm(
 ) {
   return useForm({
     mode: "controlled",
+    validateInputOnChange: true,
     initialValues: {
       id: task.id,
-      categoryId: task.categoryId ?? "",
-      statusId: task.statusId ?? "",
+      categoryId: task.categoryId ? `${task.categoryId}` : "",
+      statusId: task.statusId ? `${task.statusId}` : "",
       name: task.name ?? "",
       priority: task.priority ?? "",
     },
@@ -55,7 +57,7 @@ export function useTaskEditForm(
           .nullable()
           .transform((v) => (v === null ? "" : v)),
         statusId: z.coerce.number().int().positive(),
-        name: z.string().trim().min(1).max(255),
+        name: z.string().trim().min(1).max(355),
         priority: z.coerce
           .number()
           .int()

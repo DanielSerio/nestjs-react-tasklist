@@ -1,15 +1,18 @@
-import { Button, Flex, Group, NumberInput, Textarea } from "@mantine/core";
-import { TbCancel, TbPlus } from "react-icons/tb";
+import { Flex, Group, NumberInput, Textarea } from "@mantine/core";
+import { TbPlus } from "react-icons/tb";
 import { useTaskCreateForm } from "#hooks/kanban/useTaskForm";
 import { CategorySelect } from "#components/core/control/CategorySelect";
+import { CancelButton } from "#components/core/button/CancelButton";
+import { SubmitButton } from "#components/core/button/SubmitButton";
+import type { TaskCreateFormProps } from "./types";
 
-export function CreateTaskForm() {
+export function CreateTaskForm({ onCancelClick }: TaskCreateFormProps) {
   const form = useTaskCreateForm();
 
   return (
     <Flex h="100%" direction="column">
       <form className="task-form create">
-        <Flex direction="column">
+        <Flex direction="column" gap="xs">
           <Textarea
             autosize
             resize="vertical"
@@ -25,16 +28,15 @@ export function CreateTaskForm() {
           <NumberInput
             label="Priority"
             placeholder="NA"
+            allowDecimal={false}
             {...form.getInputProps("priority")}
           />
         </Flex>
         <Group>
-          <Button fullWidth rightSection={<TbPlus />}>
+          <SubmitButton isBusy={false} icon={TbPlus} disabled={!form.isValid()}>
             Create
-          </Button>
-          <Button fullWidth color="gray" rightSection={<TbCancel />}>
-            Cancel
-          </Button>
+          </SubmitButton>
+          <CancelButton onClick={onCancelClick} />
         </Group>
       </form>
     </Flex>
