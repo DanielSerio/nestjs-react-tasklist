@@ -62,6 +62,7 @@ export function StaticKanbanCard({
       </StaticCardSection>
 
       <StaticCardSection className="body" withBorder>
+        <Text>Category: {task.categoryId}</Text>
         <Text fz="sm">{task.name}</Text>
         {children}
       </StaticCardSection>

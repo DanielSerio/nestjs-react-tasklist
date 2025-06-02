@@ -20,13 +20,13 @@ export function useTaskCreateForm() {
           .int()
           .positive()
           .nullable()
-          .transform((v) => (v === null ? "" : v)),
+          .transform((v) => (v === null || v <= 0 ? "" : v)),
         name: z.string().trim().min(1).max(355),
         priority: z.coerce
           .number()
           .int()
           .nullable()
-          .transform((v) => (v === null ? "" : v)),
+          .transform((v) => (v === null || v <= 0 ? "" : v)),
       } satisfies Record<keyof TaskCreate, any>)
     ),
   });
@@ -42,8 +42,9 @@ export function useTaskEditForm(
     validateInputOnChange: true,
     initialValues: {
       id: task.id,
-      categoryId: task.categoryId ? `${task.categoryId}` : "",
-      statusId: task.statusId ? `${task.statusId}` : "",
+      categoryId:
+        task.categoryId && task.categoryId >= 1 ? `${task.categoryId}` : null,
+      statusId: task.statusId ? `${task.statusId}` : null,
       name: task.name ?? "",
       priority: task.priority ?? "",
     },
@@ -55,14 +56,14 @@ export function useTaskEditForm(
           .int()
           .positive()
           .nullable()
-          .transform((v) => (v === null ? "" : v)),
+          .transform((v) => (`${v}` === "" || v === null || v <= 0 ? "" : v)),
         statusId: z.coerce.number().int().positive(),
         name: z.string().trim().min(1).max(512),
         priority: z.coerce
           .number()
           .int()
           .nullable()
-          .transform((v) => (v === null ? "" : v)),
+          .transform((v) => (`${v}` === "" || v === null || v <= 0 ? "" : v)),
       } satisfies Record<
         keyof Omit<Task, "createdAt" | "updatedAt" | "deletedAt">,
         any
