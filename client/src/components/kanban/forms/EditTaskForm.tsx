@@ -1,4 +1,6 @@
 import { Button, Flex, Group, NumberInput, Textarea } from "@mantine/core";
+import { useQueryClient } from "@tanstack/react-query";
+import { notifications } from "@mantine/notifications";
 import { TbDeviceFloppy, TbTrash } from "react-icons/tb";
 import type { TaskEditFormProps } from "./types";
 import { useTaskEditForm } from "#hooks/kanban/useTaskForm";
@@ -10,15 +12,70 @@ import {
   useDeleteTaskMutation,
   useUpdateTaskMutation,
 } from "#hooks/kanban/mutations";
+import { QUERY_KEYS } from "#const/query-client";
 
 export function EditTaskForm({ task, onCancelClick }: TaskEditFormProps) {
+  const queryClient = useQueryClient();
   const form = useTaskEditForm(task);
   const updateMutation = useUpdateTaskMutation(task.id);
   const deleteMutation = useDeleteTaskMutation(task.id);
 
+  const onSubmit = form.onSubmit(async (values) => {
+    try {
+      await updateMutation.mutateAsync({
+        task: {
+          statusId: +values.statusId!,
+          categoryId: values.categoryId ? +values.categoryId : null,
+          name: values.name.trim(),
+          priority: values.priority ? +values.priority : null,
+        },
+      });
+      await queryClient.invalidateQueries({
+        queryKey: [...QUERY_KEYS.tasks.list],
+      });
+
+      notifications.show({
+        color: "green",
+        message: "Successfully updated task",
+      });
+
+      return;
+    } catch (err) {
+      notifications.show({
+        color: "red",
+        message: (err as Error).message,
+      });
+
+      return;
+    }
+  });
+
+  const onDeleteClick = async () => {
+    try {
+      await deleteMutation.mutateAsync();
+      await queryClient.invalidateQueries({
+        queryKey: [...QUERY_KEYS.tasks.list],
+      });
+
+      notifications.show({
+        color: "green",
+        message: "Successfully deleted task",
+      });
+
+      return;
+    } catch (err) {
+      notifications.show({
+        color: "red",
+        message: (err as Error).message,
+      });
+
+      return;
+    }
+  };
+
   return (
     <Flex h="100%" direction="column">
-      <form className="task-form edit">
+      <form className="task-form edit" onSubmit={onSubmit}>
         <Flex direction="column" gap="xs">
           <Textarea
             autosize
@@ -55,7 +112,13 @@ export function EditTaskForm({ task, onCancelClick }: TaskEditFormProps) {
             Save
           </SubmitButton>
           <CancelButton onClick={onCancelClick} />
-          <Button fullWidth color="red" rightSection={<TbTrash />}>
+          <Button
+            type="button"
+            fullWidth
+            color="red"
+            rightSection={<TbTrash />}
+            onClick={onDeleteClick}
+          >
             Delete
           </Button>
         </Group>
